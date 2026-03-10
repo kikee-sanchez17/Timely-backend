@@ -1,7 +1,7 @@
 CREATE TABLE users (
     user_id BIGSERIAL PRIMARY KEY ,
     email TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL
+    password_hash TEXT NOT NULL
 );
 
 CREATE TABLE categories (
@@ -17,7 +17,7 @@ CREATE TABLE countries (
 );
 
 CREATE TABLE country_timezones (
-    country_code CHAR(2) REFERENCES countries(code),
+    country_code CHAR(2) NOT NULL REFERENCES countries(code),
     timezone_id TEXT NOT NULL,
     PRIMARY KEY (country_code, timezone_id)
 );
@@ -39,20 +39,20 @@ CREATE TABLE businesses (
 
 CREATE TABLE employees (
     employee_id BIGSERIAL PRIMARY KEY,
-    business_id BIGINT REFERENCES businesses(business_id) NOT NULL,
+    business_id BIGINT NOT NULL REFERENCES businesses(business_id) ,
     name TEXT NOT NULL,
     surname TEXT,
     is_active BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
 );
 
 CREATE TABLE business_schedule_exceptions (
     business_schedule_exception_id BIGSERIAL PRIMARY KEY,
-    business_id BIGINT REFERENCES businesses(business_id) NOT NULL,
+    business_id BIGINT NOT NULL REFERENCES businesses(business_id),
     date DATE NOT NULL,
     reason TEXT,
-    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE (business_id, date)
 
 );

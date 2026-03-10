@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '4.0.2'
+    id 'org.springframework.boot' version '3.4.3' // Versión real y estable
     id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -20,7 +20,19 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
+
+// 1. El núcleo de Flyway
     implementation 'org.flywaydb:flyway-core'
+
+    // 2. ¡ESTA ES LA QUE SUELE FALTAR! Soporte específico para Postgres
+    runtimeOnly 'org.flywaydb:flyway-database-postgresql'
+
+    // El driver de Postgres (que ya lo tienes porque Hikari conecta)
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
