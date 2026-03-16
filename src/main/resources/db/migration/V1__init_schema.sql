@@ -47,7 +47,7 @@ CREATE TABLE employees (
 
 );
 
-CREATE TABLE businesses_schedule (
+CREATE TABLE business_schedule (
     business_schedule_id BIGSERIAL PRIMARY KEY,
     business_id BIGINT NOT NULL REFERENCES businesses(business_id),
     day_of_week SMALLINT NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),
@@ -57,7 +57,7 @@ CREATE TABLE businesses_schedule (
     UNIQUE (business_id, day_of_week, start_time, end_time)
 );
 
-CREATE TABLE employees_schedule (
+CREATE TABLE employee_schedule (
     employee_schedule_id BIGSERIAL PRIMARY KEY,
     employee_id BIGINT NOT NULL REFERENCES employees(employee_id),
     day_of_week SMALLINT NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),
@@ -84,4 +84,111 @@ CREATE TABLE employee_schedule_exceptions (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE (employee_id, date)
 );
+CREATE TYPE exception_interval_type AS ENUM (
+    'CLOSED_INTERVAL', 'OPEN_INTERVAL');
+
+CREATE TABLE business_exception_intervals (
+    business_exception_interval_id BIGSERIAL PRIMARY KEY,
+    business_id BIGINT NOT NULL REFERENCES businesses(business_id),
+    date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    interval_type exception_interval_type NOT NULL,
+    reason TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CHECK (start_time < end_time)
+);
+
+CREATE TABLE employee_exception_intervals (
+    employee_exception_interval_id BIGSERIAL PRIMARY KEY,
+    employee_id BIGINT NOT NULL REFERENCES employees(employee_id),
+    date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    interval_type exception_interval_type NOT NULL,
+    reason TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    CHECK (start_time < end_time)
+);
+
+CREATE TABLE services (
+    service_id BIGSERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    business_id BIGINT NOT NULL REFERENCES businesses(business_id),
+    description TEXT,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE subservices (
+    subservice_id BIGSERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    description TEXT,
+    price DECIMAL(10,2),
+    duration_minutes INTEGER NOT NULL,
+    service_id BIGINT NOT NULL REFERENCES services(service_id),
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE employee_subservices (
+    subservice_id BIGINT NOT NULL REFERENCES subservices(subservice_id),
+    employee_id BIGINT NOT NULL REFERENCES employees(employee_id),
+    PRIMARY KEY (subservice_id, employee_id)
+);
+
+CREATE TYPE booking_status AS ENUM (
+    'PENDING',
+    'CONFIRMED',
+    'CANCELLED_BY_CUSTOMER',
+    'CANCELLED_BY_BUSINESS',
+    'COMPLETED',
+    'NO_SHOW'
+);
+
+CREATE TABLE bookings (
+    booking_id BIGSERIAL PRIMARY KEY,
+    start_datetime TIMESTAMPTZ NOT NULL,
+    end_datetime TIMESTAMPTZ NOT NULL,
+    subservice_id BIGINT NOT NULL REFERENCES subservices(subservice_id),
+    customer_user_id BIGINT NOT NULL REFERENCES users(user_id),
+    employee_id BIGINT NOT NULL REFERENCES employees(employee_id),
+    status booking_status NOT NULL DEFAULT 'PENDING',
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    notes TEXT,
+    cancel_reason TEXT,
+    CHECK (start_datetime < end_datetime)
+);
+
+CREATE TABLE images (
+    image_id BIGSERIAL PRIMARY KEY,
+    path TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    alt_text TEXT,
+    uploaded_by BIGINT NOT NULL REFERENCES users(user_id)
+);
+
+CREATE TABLE business_images (
+    business_id BIGINT NOT NULL REFERENCES businesses(business_id),
+    image_id BIGINT NOT NULL REFERENCES images(image_id),
+    PRIMARY KEY (business_id, image_id)
+);
+
+CREATE TABLE service_images (
+    service_id BIGINT NOT NULL REFERENCES services(service_id),
+    image_id BIGINT NOT NULL REFERENCES images(image_id),
+    PRIMARY KEY (service_id, image_id)
+);
+
+CREATE TABLE subservice_images (
+    subservice_id BIGINT NOT NULL REFERENCES subservices(subservice_id),
+    image_id BIGINT NOT NULL REFERENCES images(image_id),
+    PRIMARY KEY (subservice_id, image_id)
+);
+
+
+
 
