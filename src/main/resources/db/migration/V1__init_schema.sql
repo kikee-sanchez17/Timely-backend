@@ -47,6 +47,26 @@ CREATE TABLE employees (
 
 );
 
+CREATE TABLE businesses_schedule (
+    business_schedule_id BIGSERIAL PRIMARY KEY,
+    business_id BIGINT NOT NULL REFERENCES businesses(business_id),
+    day_of_week SMALLINT NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    CHECK (start_time < end_time),
+    UNIQUE (business_id, day_of_week, start_time, end_time)
+);
+
+CREATE TABLE employees_schedule (
+    employee_schedule_id BIGSERIAL PRIMARY KEY,
+    employee_id BIGINT NOT NULL REFERENCES employees(employee_id),
+    day_of_week SMALLINT NOT NULL CHECK (day_of_week BETWEEN 0 AND 6),
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    CHECK (start_time < end_time),
+    UNIQUE (employee_id, day_of_week, start_time, end_time)
+);
+
 CREATE TABLE business_schedule_exceptions (
     business_schedule_exception_id BIGSERIAL PRIMARY KEY,
     business_id BIGINT NOT NULL REFERENCES businesses(business_id),
@@ -54,5 +74,14 @@ CREATE TABLE business_schedule_exceptions (
     reason TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE (business_id, date)
-
 );
+
+CREATE TABLE employee_schedule_exceptions (
+    employee_schedule_exception_id BIGSERIAL PRIMARY KEY,
+    employee_id BIGINT NOT NULL REFERENCES employees(employee_id),
+    date DATE NOT NULL,
+    reason TEXT,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    UNIQUE (employee_id, date)
+);
+
