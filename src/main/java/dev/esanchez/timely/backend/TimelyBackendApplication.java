@@ -1,4 +1,4 @@
-package com.example.timelybackend;
+package dev.esanchez.timely.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
