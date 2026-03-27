@@ -11,13 +11,14 @@ CREATE TABLE categories (
 );
 
 CREATE TABLE countries (
-    code CHAR(2) PRIMARY KEY,
+    code VARCHAR(2) PRIMARY KEY,
     name_en TEXT NOT NULL,
     flag_emoji TEXT
+CONSTRAINT code_length CHECK (char_length(code) = 2)
 );
 
 CREATE TABLE country_timezones (
-    country_code CHAR(2) NOT NULL REFERENCES countries(code),
+    country_code VARCHAR(2) NOT NULL REFERENCES countries(code),
     timezone_id TEXT NOT NULL,
     PRIMARY KEY (country_code, timezone_id)
 );
@@ -28,7 +29,7 @@ CREATE TABLE businesses (
     name TEXT NOT NULL,
     info TEXT,
     category_id BIGINT NOT NULL REFERENCES categories(category_id),
-    country_code CHAR(2) NOT NULL,
+    country_code VARCHAR(2) NOT NULL,
     city TEXT NOT NULL,
     timezone_id TEXT NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),

@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 public class Country {
 
     @Id
-    @Column(name = "code", length = 2)
+    @Column(name = "code", nullable = false ,length = 2)
     private String code;
 
     @Column(name = "name_en", nullable = false)

@@ -7,10 +7,10 @@ import java.util.Objects;
 @Embeddable
 public class CountryTimezoneId implements Serializable {
 
-    @Column(name = "country_code", length = 2)
+    @Column(name = "country_code", nullable = false, length = 2)
     private String countryCode;
 
-    @Column(name = "timezone_id")
+    @Column(name = "timezone_id", nullable = false)
     private String timezoneId;
 
     public CountryTimezoneId() {
