@@ -15,17 +15,11 @@ public class CountryTimezone {
     //the primary key of the Country table because it is annotated with @Id.
     private Country country;
 
-
-
     public CountryTimezone() {
     }
 
     public CountryTimezoneId getId() {
         return id;
-    }
-
-    public void setId(CountryTimezoneId id) {
-        this.id = id;
     }
 
     public Country getCountry() {

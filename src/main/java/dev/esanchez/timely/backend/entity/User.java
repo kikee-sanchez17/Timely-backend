@@ -1,4 +1,6 @@
 package dev.esanchez.timely.backend.entity;
+
+import dev.esanchez.timely.backend.util.ValidationUtils;
 import jakarta.persistence.*;
 
 @Entity
@@ -13,10 +15,15 @@ public class User {
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password_hash",  nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
-    public User(){
+    public User() {
+    }
+
+    public User(String email, String passwordHash) {
+        this.email = validateEmail(email);
+        this.passwordHash = ValidationUtils.validateText(passwordHash,"Password hash cannot be null or blank");
     }
 
     public Long getUserId() {
@@ -31,18 +38,19 @@ public class User {
         return passwordHash;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void updateEmail(String email) {
+        this.email = validateEmail(email);
     }
 
-    public void setEmail(String email){
-        this.email = email;
+    public void changePassword(String passwordHash) {
+        this.passwordHash = ValidationUtils.validateText(passwordHash,"Password hash cannot be null or blank");
     }
 
-    public void setPasswordHash(String passwordHash){
-        this.passwordHash = passwordHash;
+    private String validateEmail(String email) {
+        if (email == null || email.isBlank()) {
+            throw new IllegalArgumentException("Email cannot be null or blank");
+        }
+        return email.trim().toLowerCase();
     }
-
-
 
 }

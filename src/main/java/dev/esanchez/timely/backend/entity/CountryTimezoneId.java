@@ -29,13 +29,7 @@ public class CountryTimezoneId implements Serializable {
         return timezoneId;
     }
 
-    public void setCountryCode(String countryCode) {
-        this.countryCode = countryCode;
-    }
 
-    public void setTimezoneId(String timezoneId) {
-        this.timezoneId = timezoneId;
-    }
 
     //
 
