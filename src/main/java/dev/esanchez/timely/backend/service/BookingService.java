@@ -5,6 +5,9 @@ import dev.esanchez.timely.backend.entity.Booking;
 import dev.esanchez.timely.backend.entity.Employee;
 import dev.esanchez.timely.backend.entity.Subservice;
 import dev.esanchez.timely.backend.entity.User;
+import dev.esanchez.timely.backend.exception.CustomerNotAuthenticatedException;
+import dev.esanchez.timely.backend.exception.EmployeeNotFoundException;
+import dev.esanchez.timely.backend.exception.SubserviceNotFoundException;
 import dev.esanchez.timely.backend.repository.BookingRepository;
 import dev.esanchez.timely.backend.repository.EmployeeRepository;
 import dev.esanchez.timely.backend.repository.SubserviceRepository;
@@ -32,15 +35,15 @@ public class BookingService {
     }
 
     public Booking createBooking(CreateBookingRequest request) {
-        // SELECT * FROM USERS where user_id = request.user_id
+
         User customer = userRepository.findById(request.getCustomerUserId())
-                .orElseThrow(() -> new RuntimeException("Customer user not found"));
+                .orElseThrow(CustomerNotAuthenticatedException::new);
 
         Employee employee = employeeRepository.findById(request.getEmployeeId())
-                .orElseThrow(() -> new RuntimeException("Employee not found"));
+                .orElseThrow(() -> new EmployeeNotFoundException(request.getEmployeeId()));
 
         Subservice subservice = subserviceRepository.findById(request.getSubserviceId())
-                .orElseThrow(() -> new RuntimeException("Subservice not found"));
+                .orElseThrow(() -> new SubserviceNotFoundException(request.getSubserviceId()));
 
         Booking booking = new Booking();
         booking.setStartDatetime(request.getStartDatetime());

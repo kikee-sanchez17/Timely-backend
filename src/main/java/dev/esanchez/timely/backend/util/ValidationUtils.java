@@ -5,7 +5,7 @@ import java.time.LocalTime;
 public final class ValidationUtils {
 
     private ValidationUtils() {
-        // evita instanciación
+
     }
 
     //Checks if the text is null or empty, and then trim the text
