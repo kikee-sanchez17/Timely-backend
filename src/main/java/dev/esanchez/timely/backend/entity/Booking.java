@@ -176,6 +176,30 @@ public class Booking {
         this.cancelReason = ValidationUtils.normalizeOptionalText(cancelReason);
     }
 
+
+    public void setSubservice(Subservice subservice) {
+        this.subservice = subservice;
+    }
+
+    public void setCustomerUser(User customerUser) {
+        this.customerUser = customerUser;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public void setStartDatetime(OffsetDateTime startDatetime) {
+        this.startDatetime = startDatetime;
+    }
+
+    public void setEndDatetime(OffsetDateTime endDatetime) {
+        this.endDatetime = endDatetime;
+    }
+
     private void validateDateTimeRange(OffsetDateTime startDatetime, OffsetDateTime endDatetime) {
         if (!startDatetime.isBefore(endDatetime)) {
             throw new IllegalArgumentException("Start datetime must be before end datetime");
