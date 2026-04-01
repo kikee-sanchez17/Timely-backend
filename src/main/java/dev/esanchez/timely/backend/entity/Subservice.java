@@ -131,4 +131,12 @@ public class Subservice {
         }
         return durationMinutes;
     }
+
+    public void setSubserviceId(long l) {
+        this.subserviceId = l;
+    }
+
+    public void setDurationMinutes(int i) {
+        this.durationMinutes = i;
+    }
 }

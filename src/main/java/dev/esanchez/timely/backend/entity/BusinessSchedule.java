@@ -91,4 +91,7 @@ public class BusinessSchedule {
         return day;
     }
 
+    public void setStartTime(LocalTime of) {
+        this.startTime = of;
+    }
 }

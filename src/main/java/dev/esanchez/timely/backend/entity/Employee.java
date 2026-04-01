@@ -86,4 +86,13 @@ public class Employee {
     public void deactivate() {
         this.isActive = false;
     }
+
+    public void setEmployeeId(long l) {
+        this.employeeId = l;
+    }
+
+    public void setBusiness(Business business) {
+
+        this.business = business;
+    }
 }

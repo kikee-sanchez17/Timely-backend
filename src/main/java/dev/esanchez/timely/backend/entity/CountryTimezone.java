@@ -29,4 +29,8 @@ public class CountryTimezone {
     public void setCountry(Country country) {
         this.country = country;
     }
+
+    public void setId(CountryTimezoneId countryTimezoneId) {
+        this.id = countryTimezoneId;
+    }
 }

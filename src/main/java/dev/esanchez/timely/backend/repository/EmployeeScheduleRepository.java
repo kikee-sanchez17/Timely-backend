@@ -1,0 +1,16 @@
+package dev.esanchez.timely.backend.repository;
+
+import dev.esanchez.timely.backend.entity.EmployeeSchedule;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+
+public interface EmployeeScheduleRepository extends JpaRepository<EmployeeSchedule, Long> {
+
+    List<EmployeeSchedule> findAllByEmployee_employeeIdAndDayOfWeek(Long employee_id, int dayOfWeek);
+
+    boolean existsByEmployeeIdAndDayOfWeek(Long employeeId, Integer dayOfWeek);
+}

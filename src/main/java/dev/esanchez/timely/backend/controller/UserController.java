@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponse createBooking(@RequestBody CreateUserRequest request) {
+    public UserResponse createUser(@RequestBody CreateUserRequest request) {
         User user = userService.createUser(request);
         return new UserResponse(user.getUserId(), user.getEmail());
     }

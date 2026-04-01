@@ -123,4 +123,11 @@ public class Business {
         this.isActive = false;
     }
 
+    public void setBusinessId(long l) {
+        this.businessId = l;
+    }
+
+    public void setCountryTimezone(CountryTimezone countryTimezone) {
+        this.countryTimezone = countryTimezone;
+    }
 }
