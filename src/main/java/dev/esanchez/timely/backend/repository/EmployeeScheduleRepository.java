@@ -12,5 +12,5 @@ public interface EmployeeScheduleRepository extends JpaRepository<EmployeeSchedu
 
     List<EmployeeSchedule> findAllByEmployee_employeeIdAndDayOfWeek(Long employee_id, int dayOfWeek);
 
-    boolean existsByEmployeeIdAndDayOfWeek(Long employeeId, Integer dayOfWeek);
+    boolean existsByEmployee_employeeIdAndDayOfWeek(Long employeeId, Integer dayOfWeek);
 }

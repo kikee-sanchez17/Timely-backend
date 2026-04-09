@@ -9,5 +9,5 @@ import java.time.LocalDate;
 @Repository
 public interface EmployeeScheduleExceptionRepository extends JpaRepository<EmployeeScheduleException, Long> {
 
-    EmployeeScheduleException findByIdAndDate(Long id, LocalDate date);
+    EmployeeScheduleException findByEmployee_EmployeeIdAndDate(Long id, LocalDate date);
 }

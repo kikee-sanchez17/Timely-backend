@@ -10,6 +10,6 @@ import java.util.List;
 public interface BusinessScheduleRepository extends JpaRepository<BusinessSchedule,Long> {
 
     //SELECT * FROM BusinessSchedule JOIN business.id = id
- List<BusinessSchedule> findAllByBusiness_businessIdAndDayOfWeek(Long business_business_id, int dayOfWeek);
+ List<BusinessSchedule> findAllByBusiness_businessIdAndDayOfWeek(Long business_id, int dayOfWeek);
 
 }

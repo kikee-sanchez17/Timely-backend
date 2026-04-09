@@ -93,6 +93,8 @@ public class BusinessExceptionInterval {
         return intervalType;
     }
 
+
+
     public String getReason() {
         return reason;
     }

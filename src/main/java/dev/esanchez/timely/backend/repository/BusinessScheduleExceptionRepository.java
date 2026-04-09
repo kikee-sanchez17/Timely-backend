@@ -11,6 +11,6 @@ import java.time.LocalDate;
 @Repository
 public interface BusinessScheduleExceptionRepository extends JpaRepository<BusinessScheduleException, Long> {
 
-    BusinessScheduleException findByIdAndDate(Long id, LocalDate date);
+    BusinessScheduleException findByBusiness_BusinessIdAndDate(Long id, LocalDate date);
 
 }
