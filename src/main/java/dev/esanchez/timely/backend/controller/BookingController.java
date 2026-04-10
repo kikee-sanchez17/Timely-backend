@@ -3,13 +3,11 @@ package dev.esanchez.timely.backend.controller;
 import dev.esanchez.timely.backend.dto.request.AvailableSlotRequest;
 import dev.esanchez.timely.backend.dto.request.CreateBookingRequest;
 import dev.esanchez.timely.backend.dto.response.AvailableSlotDTO;
-import dev.esanchez.timely.backend.dto.response.BookingFreeSlotsResponse;
 import dev.esanchez.timely.backend.dto.response.BookingResponse;
 import dev.esanchez.timely.backend.entity.Booking;
 import dev.esanchez.timely.backend.service.BookingService;
 import org.springframework.web.bind.annotation.*;
 
-import java.awt.print.Book;
 import java.util.List;
 
 @RestController

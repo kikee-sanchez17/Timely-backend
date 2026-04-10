@@ -23,7 +23,8 @@ public class UserService {
         if(userRepository.existsByEmail(request.getEmail())){
             throw new EmailAlreadyExistsException(request.getEmail());
         }
-        User user = new User(request.getEmail(), passwordEncoder.encode(request.getPassword()));
+        
+        User user = new User(request.getEmail(), passwordEncoder.encode(request.getPassword()), request.getName(),request.getSurname(),request.getPhoneNumber());
 
         return userRepository.save(user);
     }

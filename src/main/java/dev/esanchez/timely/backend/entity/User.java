@@ -3,6 +3,8 @@ package dev.esanchez.timely.backend.entity;
 import dev.esanchez.timely.backend.util.ValidationUtils;
 import jakarta.persistence.*;
 
+import java.time.OffsetDateTime;
+
 @Entity
 @Table(name = "users")
 public class User {
@@ -18,12 +20,34 @@ public class User {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "suranme")
+    private String suranme;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "created_at", nullable = false,  updatable = false)
+    private OffsetDateTime createdAt;
+
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
+
+
     public User() {
     }
 
-    public User(String email, String passwordHash) {
+    public User(String email, String passwordHash, String name ,String suranme, String phoneNumber) {
         this.email = validateEmail(email);
         this.passwordHash = ValidationUtils.validateText(passwordHash,"Password hash cannot be null or blank");
+        this.name = name;
+        this.suranme = ValidationUtils.validateText(suranme,"Suranme");
+        this.phoneNumber = phoneNumber;
+        this.isActive = true;
+
+
     }
 
     public Long getUserId() {
@@ -34,8 +58,38 @@ public class User {
         return email;
     }
 
+
+
     public String getPasswordHash() {
         return passwordHash;
+    }
+
+    public String getName() {
+        return name;
+    }
+    public String getSuranme() {
+        return suranme;
+    }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+    public OffsetDateTime getCreatedAt() {
+        return createdAt;
+    }
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateSuranme(String suranme) {
+        this.suranme = suranme;
+    }
+
+    public void updatePhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public void updateEmail(String email) {
