@@ -80,7 +80,6 @@ public class BookingService {
 
     public List<AvailableSlotDTO> getAvailableSlots(AvailableSlotRequest request) {
 
-
         Employee employee = employeeRepository.findById(request.getEmployeeId())
                 .orElseThrow(() -> new EmployeeNotFoundException(request.getEmployeeId()));
 
@@ -92,10 +91,7 @@ public class BookingService {
         BusinessScheduleException businessScheduleException = businessScheduleExceptionRepository.findByBusiness_BusinessIdAndDate(business.getBusinessId(),request.getDate());
         EmployeeScheduleException employeeScheduleException = employeeScheduleExceptionRepository.findByEmployee_EmployeeIdAndDate(employee.getEmployeeId(),request.getDate());
 
-
         if (isClosedForFullDay(businessScheduleException,employeeScheduleException )) return List.of();
-
-        List<AvailableSlotDTO> availableSlots = new ArrayList<>();
 
         DayOfWeek dayOfWeek = request.getDate().getDayOfWeek();
 
@@ -113,20 +109,15 @@ public class BookingService {
         List <TimeBlock> employeeExceptionIntervalsOpen = filterByEmployeeExceptionIntervalSchedules(employeeExceptionIntervals,ExceptionIntervalType.OPEN_INTERVAL,request.getDate(),zoneId);
         List <TimeBlock> employeeExceptionIntervalsClosed = filterByEmployeeExceptionIntervalSchedules(employeeExceptionIntervals,ExceptionIntervalType.CLOSED_INTERVAL,request.getDate(),zoneId);
 
-
-
         //List with the employee schedule for the day that the user indicates
         List <EmployeeSchedule> employeeSchedules  =  employeeScheduleRepository.findAllByEmployee_employeeIdAndDayOfWeek(request.getEmployeeId(), dayOfWeek.getValue());
 
         //List with the business schedule for the day that the user indicates
         List <BusinessSchedule> businessSchedules  = businessScheduleRepository.findAllByBusiness_businessIdAndDayOfWeek(business.getBusinessId(), dayOfWeek.getValue());
 
-
         List <TimeBlock> timeBlocksBusinessSchedules = toAvailabilityBlocksFromBusinessSchedules(businessSchedules,zoneId,request.getDate());
 
         List <TimeBlock> timeBlocksEmployeeSchedules = toAvailabilityBlocksFromEmployeeSchedules(employeeSchedules,zoneId,request.getDate());
-
-
 
         List <Booking> bookings = getBookingsForEmployeeOnDate(request.getDate(),employee.getEmployeeId(),zoneId);
 
@@ -138,40 +129,8 @@ public class BookingService {
         blockedTimeBlocks.addAll(employeeExceptionIntervalsClosed);
         blockedTimeBlocks = mergeOverlappingTimeBlocks(blockedTimeBlocks);
 
-        //checks if employee has their own schedule
-        if (!timeBlocksEmployeeSchedules.isEmpty()) {
-            //Merge employee Schedule with intervals open
-            List<TimeBlock> employeeScheduleWithIntervalOpen = new ArrayList<>(employeeExceptionIntervalsOpen);
-            employeeScheduleWithIntervalOpen.addAll(timeBlocksEmployeeSchedules);
-            employeeScheduleWithIntervalOpen = mergeOverlappingTimeBlocks(employeeScheduleWithIntervalOpen);
-
-            for (TimeBlock employeeSchedule : employeeScheduleWithIntervalOpen) {
-
-                processAvailabilityBlock(
-                        availableSlots,
-                        blockedTimeBlocks,
-                        employeeSchedule,
-                        durationSubservice
-                );
-            }
-        }else{
-
-            List<TimeBlock> businessScheduleWithIntervalOpen = new ArrayList<>(businessExceptionIntervalsOpen);
-            businessScheduleWithIntervalOpen.addAll(timeBlocksBusinessSchedules);
-            businessScheduleWithIntervalOpen = mergeOverlappingTimeBlocks(businessScheduleWithIntervalOpen);
-
-            for (TimeBlock businessSchedule : businessScheduleWithIntervalOpen) {
-
-
-                processAvailabilityBlock(
-                        availableSlots,
-                        blockedTimeBlocks,
-                        businessSchedule,
-                        durationSubservice
-                );
-            }
-        }
-        return availableSlots;
+        return getAvailableSlots(timeBlocksEmployeeSchedules,employeeExceptionIntervalsOpen,blockedTimeBlocks,durationSubservice,businessExceptionIntervalsOpen
+        ,timeBlocksBusinessSchedules);
     }
 
 
@@ -404,6 +363,43 @@ public class BookingService {
                 toOffsetDateTime(date, startTime, zoneId),
                 toOffsetDateTime(date, endTime, zoneId)
         );
+    }
+
+    private List <AvailableSlotDTO> getAvailableSlots(List <TimeBlock> timeBlocksEmployeeSchedules, List <TimeBlock> employeeExceptionIntervalsOpen, List <TimeBlock> blockedTimeBlocks, Integer durationSubservice, List <TimeBlock> businessExceptionIntervalsOpen, List <TimeBlock> timeBlocksBusinessSchedules) {
+        List<AvailableSlotDTO> availableSlots = new ArrayList<>();
+        //checks if employee has their own schedule
+        if (!timeBlocksEmployeeSchedules.isEmpty()) {
+            //Merge employee Schedule with intervals open
+            List<TimeBlock> employeeScheduleWithIntervalOpen = new ArrayList<>(employeeExceptionIntervalsOpen);
+            employeeScheduleWithIntervalOpen.addAll(timeBlocksEmployeeSchedules);
+            employeeScheduleWithIntervalOpen = mergeOverlappingTimeBlocks(employeeScheduleWithIntervalOpen);
+
+            for (TimeBlock employeeSchedule : employeeScheduleWithIntervalOpen) {
+
+                processAvailabilityBlock(
+                        availableSlots,
+                        blockedTimeBlocks,
+                        employeeSchedule,
+                        durationSubservice
+                );
+            }
+        }else{
+
+            List<TimeBlock> businessScheduleWithIntervalOpen = new ArrayList<>(businessExceptionIntervalsOpen);
+            businessScheduleWithIntervalOpen.addAll(timeBlocksBusinessSchedules);
+            businessScheduleWithIntervalOpen = mergeOverlappingTimeBlocks(businessScheduleWithIntervalOpen);
+
+            for (TimeBlock businessSchedule : businessScheduleWithIntervalOpen) {
+
+                processAvailabilityBlock(
+                        availableSlots,
+                        blockedTimeBlocks,
+                        businessSchedule,
+                        durationSubservice
+                );
+            }
+        }
+        return availableSlots;
     }
 
 
