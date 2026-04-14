@@ -23,8 +23,14 @@ public class User {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "suranme")
+    @Column(name = "surname")
     private String suranme;
+
+    @Column(name = "verification_code")
+    private String verificationCode;
+
+    @Column(name = "verification_expiration")
+    private OffsetDateTime verificationCodeExpiresAt;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -46,8 +52,13 @@ public class User {
         this.suranme = ValidationUtils.validateText(suranme,"Suranme");
         this.phoneNumber = phoneNumber;
         this.isActive = true;
+    }
 
-
+    public User(String email, String passwordHash){
+        this.email = validateEmail(email);
+        this.passwordHash = ValidationUtils.validateText(passwordHash,"Password hash cannot be null or blank");
+        this.isActive = true;
+        createdAt = OffsetDateTime.now();
     }
 
     public Long getUserId() {
@@ -58,8 +69,6 @@ public class User {
         return email;
     }
 
-
-
     public String getPasswordHash() {
         return passwordHash;
     }
@@ -67,17 +76,24 @@ public class User {
     public String getName() {
         return name;
     }
+
     public String getSuranme() {
         return suranme;
     }
+
     public String getPhoneNumber() {
         return phoneNumber;
     }
     public OffsetDateTime getCreatedAt() {
         return createdAt;
     }
+
     public Boolean getIsActive() {
         return isActive;
+    }
+
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public void updateName(String name) {
@@ -94,6 +110,22 @@ public class User {
 
     public void updateEmail(String email) {
         this.email = validateEmail(email);
+    }
+
+    public String getVerificationCode() {
+        return verificationCode;
+    }
+
+    public void setVerificationCode(String verificationCode) {
+        this.verificationCode = verificationCode;
+    }
+
+    public OffsetDateTime getVerificationCodeExpiresAt() {
+        return verificationCodeExpiresAt;
+    }
+
+    public void setVerificationCodeExpiresAt(OffsetDateTime verificationCodeExpiresAt) {
+        this.verificationCodeExpiresAt = verificationCodeExpiresAt;
     }
 
     public void changePassword(String passwordHash) {

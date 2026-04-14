@@ -25,6 +25,13 @@ public class UserRoleId implements Serializable {
         return roleId;
     }
 
+    public void setUserId(long userId) {
+        this.userId = userId;
+    }
+    public void setRoleId(long roleId) {
+        this.roleId = roleId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

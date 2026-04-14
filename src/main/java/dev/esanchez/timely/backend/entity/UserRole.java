@@ -24,6 +24,8 @@ public class UserRole {
     public UserRole(User user, Role role){
         this.user = user;
         this.role = role;
+        this.id = new UserRoleId(user.getUserId(), role.getRoleId());
+
     }
     public UserRoleId getId() {
         return id;
