@@ -1,0 +1,13 @@
+package dev.esanchez.timely.backend.module.booking.record;
+
+import dev.esanchez.timely.backend.module.common.TimeBlock;
+
+import java.util.List;
+
+public record AvailabilityBlocks(
+        List<TimeBlock> employeeScheduleBlocks,
+        List<TimeBlock> employeeOpenExceptionBlocks,
+        List<TimeBlock> businessScheduleBlocks,
+        List<TimeBlock> businessOpenExceptionBlocks,
+        List<TimeBlock> blockedTimeBlocks) {
+}
