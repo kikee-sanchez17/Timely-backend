@@ -22,9 +22,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public String handleNotFound(NotFoundException ex) {
-
-        return ex.getMessage();
+    public String handleNotFound(NotFoundException ex) {return ex.getMessage();
     }
 
 }

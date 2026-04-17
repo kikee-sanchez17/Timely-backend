@@ -6,8 +6,6 @@ public class CreateUserRequest {
     private String password;
     private String name;
     private String surname;
-    private String phoneNumber;
-
 
     public String getEmail() {
         return email;
@@ -38,12 +36,5 @@ public class CreateUserRequest {
     public void setSurname(String surname) {
         this.surname = surname;
     }
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
 
 }

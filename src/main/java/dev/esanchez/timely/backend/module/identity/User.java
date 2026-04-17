@@ -39,7 +39,7 @@ public class User {
     private OffsetDateTime createdAt;
 
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
+    private Boolean isActive;
 
 
     public User() {
@@ -59,6 +59,15 @@ public class User {
         this.passwordHash = ValidationUtils.validateText(passwordHash,"Password hash cannot be null or blank");
         this.isActive = true;
         createdAt = OffsetDateTime.now();
+    }
+
+    public User(String name, String surname, String email, String passwordHash){
+        this.name = name;
+        this.suranme = surname;
+        this.email = validateEmail(email);
+        this.passwordHash = ValidationUtils.validateText(passwordHash,"Password hash cannot be null or blank");
+        createdAt = OffsetDateTime.now();
+
     }
 
     public Long getUserId() {

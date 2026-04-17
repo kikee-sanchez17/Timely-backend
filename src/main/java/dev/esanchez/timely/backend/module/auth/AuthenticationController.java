@@ -1,12 +1,14 @@
 package dev.esanchez.timely.backend.module.auth;
 
 import dev.esanchez.timely.backend.module.auth.dto.request.VerifyUserRequest;
+import dev.esanchez.timely.backend.module.auth.dto.response.VerifyUserResponse;
 import dev.esanchez.timely.backend.module.identity.dto.request.LoginUserRequest;
 import dev.esanchez.timely.backend.module.identity.dto.request.RegisterUserRequest;
 import dev.esanchez.timely.backend.module.identity.dto.response.LoginResponse;
 import dev.esanchez.timely.backend.module.identity.User;
 import dev.esanchez.timely.backend.core.security.CustomUserDetails;
 import dev.esanchez.timely.backend.core.jwt.JwtService;
+import dev.esanchez.timely.backend.module.identity.dto.response.RegisterUserResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +25,17 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody RegisterUserRequest registerUserRequest) {
+    public RegisterUserResponse register(@RequestBody RegisterUserRequest registerUserRequest) {
         User registeredUser = authenticationService.signup(registerUserRequest);
-        return ResponseEntity.ok(registeredUser);
+        return new RegisterUserResponse(
+                new RegisterUserResponse.UserResponse(
+                        registeredUser.getUserId().toString(),
+                        registeredUser.getEmail(),
+                        registeredUser.getName(),
+                        registeredUser.getSuranme(),
+                        registeredUser.getIsActive()
+                )
+        );
     }
 
     @PostMapping("/login")
@@ -39,13 +49,9 @@ public class AuthenticationController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<?> verifyUser(@RequestBody VerifyUserRequest verifyUserRequest) {
-        try {
+    public VerifyUserResponse verifyUser(@RequestBody VerifyUserRequest verifyUserRequest) {
             authenticationService.verifyUser(verifyUserRequest);
-            return ResponseEntity.ok("Account verified successfully");
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+            return new VerifyUserResponse("Account Verified successfully");
     }
 
     @PostMapping("/resend")

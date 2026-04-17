@@ -47,7 +47,7 @@ public class AuthenticationService {
 
     //Creates user but it is not valid until its verified
     public User signup(RegisterUserRequest input) {
-        User user = new User(input.getEmail(), passwordEncoder.encode(input.getPassword()));
+        User user = new User(input.getName(), input.getSurname(),input.getEmail(), passwordEncoder.encode(input.getPassword()));
         user.setVerificationCode(generateVerificationCode());
         user.setVerificationCodeExpiresAt(OffsetDateTime.now().plusMinutes(15));
         user.setIsActive(false);
@@ -83,8 +83,6 @@ public class AuthenticationService {
             if (user.getVerificationCodeExpiresAt().isBefore(OffsetDateTime.now())) {
                 throw new RuntimeException("Verification code has expired");
             }
-
-
             if (user.getVerificationCode().equals(input.getVerificationCode())) {
                 //Set Customer Role to user
                 setRoleToUser(user,input,1L);

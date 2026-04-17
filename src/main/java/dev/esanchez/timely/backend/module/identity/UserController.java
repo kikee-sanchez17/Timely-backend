@@ -32,4 +32,9 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
+    @GetMapping("/getUsers")
+    public ResponseEntity<String> getUsers() {
+        return ResponseEntity.ok("Hello from Spring Boot!");
+    }
+
 }
