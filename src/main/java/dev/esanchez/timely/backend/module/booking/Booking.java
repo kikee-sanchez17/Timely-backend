@@ -1,9 +1,9 @@
 package dev.esanchez.timely.backend.module.booking;
 
-import dev.esanchez.timely.backend.module.schedules.employee.Employee;
+import dev.esanchez.timely.backend.module.employee.Employee;
 import dev.esanchez.timely.backend.module.services.Subservice;
 import dev.esanchez.timely.backend.module.identity.User;
-import dev.esanchez.timely.backend.utilsCommon.ValidationUtils;
+import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

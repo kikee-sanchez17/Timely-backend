@@ -1,4 +1,4 @@
-package dev.esanchez.timely.backend.module.schedules.employee.exception;
+package dev.esanchez.timely.backend.module.employee.exception;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

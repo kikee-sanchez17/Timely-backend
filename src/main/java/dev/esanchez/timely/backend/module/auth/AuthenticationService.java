@@ -99,6 +99,7 @@ public class AuthenticationService {
     }
 
     public void resendVerificationCode(String email) {
+        System.out.println("email received: " + email);
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();

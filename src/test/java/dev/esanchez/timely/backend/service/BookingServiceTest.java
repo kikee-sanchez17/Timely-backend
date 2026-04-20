@@ -7,19 +7,19 @@ import dev.esanchez.timely.backend.module.booking.Booking;
 import dev.esanchez.timely.backend.module.booking.BookingService;
 import dev.esanchez.timely.backend.module.location.CountryTimezone;
 import dev.esanchez.timely.backend.module.location.CountryTimezoneId;
-import dev.esanchez.timely.backend.module.schedules.business.Business;
-import dev.esanchez.timely.backend.module.schedules.business.BusinessSchedule;
-import dev.esanchez.timely.backend.module.schedules.business.BusinessScheduleRepository;
-import dev.esanchez.timely.backend.module.schedules.ExceptionIntervalType;
-import dev.esanchez.timely.backend.module.schedules.business.exception.BusinessExceptionInterval;
-import dev.esanchez.timely.backend.module.schedules.business.exception.BusinessExceptionIntervalRepository;
-import dev.esanchez.timely.backend.module.schedules.business.exception.BusinessScheduleExceptionRepository;
-import dev.esanchez.timely.backend.module.schedules.employee.Employee;
-import dev.esanchez.timely.backend.module.schedules.employee.EmployeeRepository;
-import dev.esanchez.timely.backend.module.schedules.employee.EmployeeSchedule;
-import dev.esanchez.timely.backend.module.schedules.employee.EmployeeScheduleRepository;
-import dev.esanchez.timely.backend.module.schedules.employee.exception.EmployeeExceptionIntervalRepository;
-import dev.esanchez.timely.backend.module.schedules.employee.exception.EmployeeScheduleExceptionRepository;
+import dev.esanchez.timely.backend.module.business.Business;
+import dev.esanchez.timely.backend.module.business.BusinessSchedule;
+import dev.esanchez.timely.backend.module.business.BusinessScheduleRepository;
+import dev.esanchez.timely.backend.module.shared.ExceptionIntervalType;
+import dev.esanchez.timely.backend.module.business.business.exception.BusinessExceptionInterval;
+import dev.esanchez.timely.backend.module.business.exception.BusinessExceptionIntervalRepository;
+import dev.esanchez.timely.backend.module.business.exception.BusinessScheduleExceptionRepository;
+import dev.esanchez.timely.backend.module.employee.Employee;
+import dev.esanchez.timely.backend.module.employee.EmployeeRepository;
+import dev.esanchez.timely.backend.module.employee.EmployeeSchedule;
+import dev.esanchez.timely.backend.module.employee.EmployeeScheduleRepository;
+import dev.esanchez.timely.backend.module.employee.exception.EmployeeExceptionIntervalRepository;
+import dev.esanchez.timely.backend.module.employee.exception.EmployeeScheduleExceptionRepository;
 import dev.esanchez.timely.backend.module.services.Subservice;
 import dev.esanchez.timely.backend.module.services.SubserviceRepository;
 import org.junit.jupiter.api.Test;
@@ -166,7 +166,7 @@ class BookingServiceTest {
                 eq(2L), any(), any()))
                 .thenReturn(List.of(booking));
 
-        List<AvailableSlotDTO> result = bookingService.getAvailableSlots(request);
+        List<AvailableSlotDTO> result = bookingService.calculateAvailableSlots(request);
 
         assertThat(result).hasSize(7);
     }
@@ -701,7 +701,7 @@ class BookingServiceTest {
                 ))
                 .thenReturn(List.of());
 
-        List<AvailableSlotDTO> result = bookingService.getAvailableSlots(request);
+        List<AvailableSlotDTO> result = bookingService.calculateAvailableSlots(request);
 
         assertThat(result).hasSize(8);
 

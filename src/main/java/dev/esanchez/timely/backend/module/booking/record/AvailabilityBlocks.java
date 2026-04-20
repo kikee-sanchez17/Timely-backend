@@ -1,6 +1,6 @@
 package dev.esanchez.timely.backend.module.booking.record;
 
-import dev.esanchez.timely.backend.module.common.TimeBlock;
+import dev.esanchez.timely.backend.module.shared.TimeBlock;
 
 import java.util.List;
 

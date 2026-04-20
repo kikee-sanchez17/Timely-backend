@@ -1,7 +1,7 @@
 package dev.esanchez.timely.backend.module.media;
 
-import dev.esanchez.timely.backend.module.schedules.business.Business;
-import dev.esanchez.timely.backend.utilsCommon.ValidationUtils;
+import dev.esanchez.timely.backend.module.business.Business;
+import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
 
 @Entity

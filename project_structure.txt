@@ -1,0 +1,407 @@
+.
+├── HELP.md
+├── Timely-backend.iml
+├── build
+│   ├── classes
+│   │   └── java
+│   │       ├── main
+│   │       │   └── dev
+│   │       │       └── esanchez
+│   │       │           └── timely
+│   │       │               └── backend
+│   │       │                   ├── TimelyBackendApplication.class
+│   │       │                   ├── core
+│   │       │                   │   ├── email
+│   │       │                   │   │   ├── EmailConfig.class
+│   │       │                   │   │   └── EmailService.class
+│   │       │                   │   ├── globalException
+│   │       │                   │   │   ├── GlobalExceptionConfig.class
+│   │       │                   │   │   └── customGlobalException
+│   │       │                   │   │       ├── GlobalExceptionHandler.class
+│   │       │                   │   │       └── NotFoundException.class
+│   │       │                   │   ├── handleException
+│   │       │                   │   │   ├── HandleExceptionConfig.class
+│   │       │                   │   │   └── customHandleException
+│   │       │                   │   │       ├── CustomerNotAuthenticatedException.class
+│   │       │                   │   │       └── EmailAlreadyExistsException.class
+│   │       │                   │   ├── jwt
+│   │       │                   │   │   ├── JwtAuthenticationFilter.class
+│   │       │                   │   │   └── JwtService.class
+│   │       │                   │   └── security
+│   │       │                   │       ├── ApplicationConfig.class
+│   │       │                   │       ├── CustomUserDetails.class
+│   │       │                   │       └── SecurityConfig.class
+│   │       │                   ├── module
+│   │       │                   │   ├── auth
+│   │       │                   │   │   ├── AuthenticationController.class
+│   │       │                   │   │   ├── AuthenticationService.class
+│   │       │                   │   │   └── dto
+│   │       │                   │   │       ├── request
+│   │       │                   │   │       │   └── VerifyUserRequest.class
+│   │       │                   │   │       └── response
+│   │       │                   │   │           └── VerifyUserResponse.class
+│   │       │                   │   ├── booking
+│   │       │                   │   │   ├── Booking.class
+│   │       │                   │   │   ├── BookingController.class
+│   │       │                   │   │   ├── BookingRepository.class
+│   │       │                   │   │   ├── BookingService.class
+│   │       │                   │   │   ├── BookingStatus.class
+│   │       │                   │   │   ├── bookingUtils
+│   │       │                   │   │   │   └── BookingUtils.class
+│   │       │                   │   │   ├── dto
+│   │       │                   │   │   │   ├── request
+│   │       │                   │   │   │   │   ├── AvailableSlotRequest.class
+│   │       │                   │   │   │   │   └── CreateBookingRequest.class
+│   │       │                   │   │   │   └── response
+│   │       │                   │   │   │       ├── AvailableSlotDTO.class
+│   │       │                   │   │   │       └── BookingResponse.class
+│   │       │                   │   │   └── record
+│   │       │                   │   │       ├── AvailabilityBlocks.class
+│   │       │                   │   │       └── AvailabilityContext.class
+│   │       │                   │   ├── categories
+│   │       │                   │   │   └── Category.class
+│   │       │                   │   ├── common
+│   │       │                   │   │   └── TimeBlock.class
+│   │       │                   │   ├── identity
+│   │       │                   │   │   ├── Role.class
+│   │       │                   │   │   ├── RoleRepository.class
+│   │       │                   │   │   ├── User.class
+│   │       │                   │   │   ├── UserController.class
+│   │       │                   │   │   ├── UserRepository.class
+│   │       │                   │   │   ├── UserRole.class
+│   │       │                   │   │   ├── UserRoleId.class
+│   │       │                   │   │   ├── UserRoleRepository.class
+│   │       │                   │   │   ├── UserService.class
+│   │       │                   │   │   └── dto
+│   │       │                   │   │       ├── request
+│   │       │                   │   │       │   ├── CreateUserRequest.class
+│   │       │                   │   │       │   ├── LoginUserRequest.class
+│   │       │                   │   │       │   └── RegisterUserRequest.class
+│   │       │                   │   │       └── response
+│   │       │                   │   │           ├── LoginResponse.class
+│   │       │                   │   │           ├── RegisterUserResponse$UserResponse.class
+│   │       │                   │   │           ├── RegisterUserResponse.class
+│   │       │                   │   │           └── UserResponse.class
+│   │       │                   │   ├── location
+│   │       │                   │   │   ├── Country.class
+│   │       │                   │   │   ├── CountryTimezone.class
+│   │       │                   │   │   └── CountryTimezoneId.class
+│   │       │                   │   ├── media
+│   │       │                   │   │   ├── BusinessImage.class
+│   │       │                   │   │   ├── BusinessImageId.class
+│   │       │                   │   │   ├── Image.class
+│   │       │                   │   │   ├── ServiceImage.class
+│   │       │                   │   │   ├── ServiceImageId.class
+│   │       │                   │   │   ├── SubserviceImage.class
+│   │       │                   │   │   └── SubserviceImageId.class
+│   │       │                   │   ├── schedules
+│   │       │                   │   │   ├── ExceptionIntervalType.class
+│   │       │                   │   │   ├── business
+│   │       │                   │   │   │   ├── Business.class
+│   │       │                   │   │   │   ├── BusinessRepository.class
+│   │       │                   │   │   │   ├── BusinessSchedule.class
+│   │       │                   │   │   │   ├── BusinessScheduleRepository.class
+│   │       │                   │   │   │   └── exception
+│   │       │                   │   │   │       ├── BusinessExceptionInterval.class
+│   │       │                   │   │   │       ├── BusinessExceptionIntervalRepository.class
+│   │       │                   │   │   │       ├── BusinessScheduleException.class
+│   │       │                   │   │   │       └── BusinessScheduleExceptionRepository.class
+│   │       │                   │   │   └── employee
+│   │       │                   │   │       ├── Employee.class
+│   │       │                   │   │       ├── EmployeeRepository.class
+│   │       │                   │   │       ├── EmployeeSchedule.class
+│   │       │                   │   │       ├── EmployeeScheduleRepository.class
+│   │       │                   │   │       └── exception
+│   │       │                   │   │           ├── EmployeeExceptionInterval.class
+│   │       │                   │   │           ├── EmployeeExceptionIntervalRepository.class
+│   │       │                   │   │           ├── EmployeeScheduleException.class
+│   │       │                   │   │           └── EmployeeScheduleExceptionRepository.class
+│   │       │                   │   ├── services
+│   │       │                   │   │   ├── EmployeeSubservice.class
+│   │       │                   │   │   ├── EmployeeSubserviceId.class
+│   │       │                   │   │   ├── EmployeeSubserviceRepository.class
+│   │       │                   │   │   ├── Service.class
+│   │       │                   │   │   ├── ServiceRepository.class
+│   │       │                   │   │   ├── Subservice.class
+│   │       │                   │   │   └── SubserviceRepository.class
+│   │       │                   │   └── test
+│   │       │                   │       └── TestController.class
+│   │       │                   └── utilsCommon
+│   │       │                       └── ValidationUtils.class
+│   │       └── test
+│   │           └── dev
+│   │               └── esanchez
+│   │                   └── timely
+│   │                       └── backend
+│   │                           ├── TimelyBackendApplicationTests.class
+│   │                           └── service
+│   │                               └── BookingServiceTest.class
+│   ├── generated
+│   │   └── sources
+│   │       ├── annotationProcessor
+│   │       │   └── java
+│   │       │       ├── main
+│   │       │       └── test
+│   │       └── headers
+│   │           └── java
+│   │               ├── main
+│   │               └── test
+│   ├── reports
+│   │   ├── problems
+│   │   │   └── problems-report.html
+│   │   └── tests
+│   │       └── test
+│   │           ├── css
+│   │           │   ├── base-style.css
+│   │           │   └── style.css
+│   │           ├── dev.esanchez.timely.backend.service.BookingServiceTest
+│   │           │   ├── index.html
+│   │           │   └── shouldNotDuplicateSlotsWhenBusinessOpenIntervalOverlapsBusinessSchedule().html
+│   │           ├── index.html
+│   │           └── js
+│   │               └── report.js
+│   ├── resources
+│   │   └── main
+│   │       ├── application.properties
+│   │       └── db
+│   │           └── migration
+│   │               ├── V1__init_schema.sql
+│   │               ├── V2__create_countries_and_timezones.sql
+│   │               ├── V3__seed_categories.sql
+│   │               ├── V4__seed_user_business_test.sql
+│   │               ├── V5__change_booking_status_to_text.sql
+│   │               ├── V6__seed_business_schedule_sharp_studio_barber.sql
+│   │               ├── V7__add_user_profile_and_roles.sql
+│   │               └── V8__add_verification_columns_to_users.sql
+│   ├── test-results
+│   │   └── test
+│   │       ├── TEST-dev.esanchez.timely.backend.service.BookingServiceTest.xml
+│   │       └── binary
+│   │           ├── output-events.bin
+│   │           └── results-generic.bin
+│   └── tmp
+│       ├── compileJava
+│       │   ├── compileTransaction
+│       │   │   ├── backup-dir
+│       │   │   └── stash-dir
+│       │   │       ├── ApplicationConfig.class.uniqueId0
+│       │   │       ├── AuthenticationController.class.uniqueId22
+│       │   │       ├── AuthenticationService.class.uniqueId3
+│       │   │       ├── AvailabilityContext.class.uniqueId42
+│       │   │       ├── Booking.class.uniqueId9
+│       │   │       ├── BookingController.class.uniqueId6
+│       │   │       ├── BookingRepository.class.uniqueId28
+│       │   │       ├── BookingService.class.uniqueId27
+│       │   │       ├── BookingUtils.class.uniqueId23
+│       │   │       ├── Business.class.uniqueId32
+│       │   │       ├── BusinessExceptionInterval.class.uniqueId24
+│       │   │       ├── BusinessExceptionIntervalRepository.class.uniqueId30
+│       │   │       ├── BusinessImage.class.uniqueId8
+│       │   │       ├── BusinessRepository.class.uniqueId44
+│       │   │       ├── BusinessSchedule.class.uniqueId5
+│       │   │       ├── BusinessScheduleException.class.uniqueId7
+│       │   │       ├── BusinessScheduleExceptionRepository.class.uniqueId33
+│       │   │       ├── BusinessScheduleRepository.class.uniqueId19
+│       │   │       ├── CreateUserRequest.class.uniqueId31
+│       │   │       ├── CustomUserDetails.class.uniqueId40
+│       │   │       ├── Employee.class.uniqueId10
+│       │   │       ├── EmployeeExceptionInterval.class.uniqueId15
+│       │   │       ├── EmployeeExceptionIntervalRepository.class.uniqueId43
+│       │   │       ├── EmployeeRepository.class.uniqueId26
+│       │   │       ├── EmployeeSchedule.class.uniqueId21
+│       │   │       ├── EmployeeScheduleException.class.uniqueId45
+│       │   │       ├── EmployeeScheduleExceptionRepository.class.uniqueId47
+│       │   │       ├── EmployeeScheduleRepository.class.uniqueId25
+│       │   │       ├── EmployeeSubservice.class.uniqueId29
+│       │   │       ├── EmployeeSubserviceRepository.class.uniqueId41
+│       │   │       ├── GlobalExceptionHandler.class.uniqueId14
+│       │   │       ├── Image.class.uniqueId2
+│       │   │       ├── JwtAuthenticationFilter.class.uniqueId35
+│       │   │       ├── JwtService.class.uniqueId39
+│       │   │       ├── NotFoundException.class.uniqueId13
+│       │   │       ├── RegisterUserRequest.class.uniqueId38
+│       │   │       ├── SecurityConfig.class.uniqueId34
+│       │   │       ├── Service.class.uniqueId46
+│       │   │       ├── ServiceImage.class.uniqueId12
+│       │   │       ├── Subservice.class.uniqueId16
+│       │   │       ├── SubserviceImage.class.uniqueId4
+│       │   │       ├── SubserviceRepository.class.uniqueId1
+│       │   │       ├── User.class.uniqueId36
+│       │   │       ├── UserController.class.uniqueId18
+│       │   │       ├── UserRepository.class.uniqueId17
+│       │   │       ├── UserRole.class.uniqueId37
+│       │   │       ├── UserRoleRepository.class.uniqueId20
+│       │   │       └── UserService.class.uniqueId11
+│       │   └── previous-compilation-data.bin
+│       ├── compileTestJava
+│       │   ├── compileTransaction
+│       │   │   ├── backup-dir
+│       │   │   └── stash-dir
+│       │   │       └── BookingServiceTest.class.uniqueId0
+│       │   └── previous-compilation-data.bin
+│       └── test
+├── build.gradle
+├── docker-compose.yml
+├── gradle
+│   └── wrapper
+│       ├── gradle-wrapper.jar
+│       └── gradle-wrapper.properties
+├── gradlew
+├── gradlew.bat
+├── project_structure.txt
+├── settings.gradle
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── dev
+    │   │       └── esanchez
+    │   │           └── timely
+    │   │               └── backend
+    │   │                   ├── TimelyBackendApplication.java
+    │   │                   ├── core
+    │   │                   │   ├── email
+    │   │                   │   │   ├── EmailConfig.java
+    │   │                   │   │   └── EmailService.java
+    │   │                   │   ├── globalException
+    │   │                   │   │   ├── GlobalExceptionConfig.java
+    │   │                   │   │   └── customGlobalException
+    │   │                   │   │       ├── GlobalExceptionHandler.java
+    │   │                   │   │       └── NotFoundException.java
+    │   │                   │   ├── handleException
+    │   │                   │   │   ├── HandleExceptionConfig.java
+    │   │                   │   │   └── customHandleException
+    │   │                   │   │       ├── CustomerNotAuthenticatedException.java
+    │   │                   │   │       └── EmailAlreadyExistsException.java
+    │   │                   │   ├── jwt
+    │   │                   │   │   ├── JwtAuthenticationFilter.java
+    │   │                   │   │   └── JwtService.java
+    │   │                   │   └── security
+    │   │                   │       ├── ApplicationConfig.java
+    │   │                   │       ├── CustomUserDetails.java
+    │   │                   │       └── SecurityConfig.java
+    │   │                   ├── module
+    │   │                   │   ├── auth
+    │   │                   │   │   ├── AuthenticationController.java
+    │   │                   │   │   ├── AuthenticationService.java
+    │   │                   │   │   └── dto
+    │   │                   │   │       ├── request
+    │   │                   │   │       │   └── VerifyUserRequest.java
+    │   │                   │   │       └── response
+    │   │                   │   │           └── VerifyUserResponse.java
+    │   │                   │   ├── booking
+    │   │                   │   │   ├── Booking.java
+    │   │                   │   │   ├── BookingController.java
+    │   │                   │   │   ├── BookingRepository.java
+    │   │                   │   │   ├── BookingService.java
+    │   │                   │   │   ├── BookingStatus.java
+    │   │                   │   │   ├── bookingHelper
+    │   │                   │   │   ├── bookingUtils
+    │   │                   │   │   │   └── BookingUtils.java
+    │   │                   │   │   ├── dto
+    │   │                   │   │   │   ├── request
+    │   │                   │   │   │   │   ├── AvailableSlotRequest.java
+    │   │                   │   │   │   │   └── CreateBookingRequest.java
+    │   │                   │   │   │   └── response
+    │   │                   │   │   │       ├── AvailableSlotDTO.java
+    │   │                   │   │   │       └── BookingResponse.java
+    │   │                   │   │   └── record
+    │   │                   │   │       ├── AvailabilityBlocks.java
+    │   │                   │   │       └── AvailabilityContext.java
+    │   │                   │   ├── categories
+    │   │                   │   │   └── Category.java
+    │   │                   │   ├── common
+    │   │                   │   │   └── TimeBlock.java
+    │   │                   │   ├── identity
+    │   │                   │   │   ├── Role.java
+    │   │                   │   │   ├── RoleRepository.java
+    │   │                   │   │   ├── User.java
+    │   │                   │   │   ├── UserController.java
+    │   │                   │   │   ├── UserRepository.java
+    │   │                   │   │   ├── UserRole.java
+    │   │                   │   │   ├── UserRoleId.java
+    │   │                   │   │   ├── UserRoleRepository.java
+    │   │                   │   │   ├── UserService.java
+    │   │                   │   │   └── dto
+    │   │                   │   │       ├── request
+    │   │                   │   │       │   ├── CreateUserRequest.java
+    │   │                   │   │       │   ├── LoginUserRequest.java
+    │   │                   │   │       │   └── RegisterUserRequest.java
+    │   │                   │   │       └── response
+    │   │                   │   │           ├── LoginResponse.java
+    │   │                   │   │           ├── RegisterUserResponse.java
+    │   │                   │   │           └── UserResponse.java
+    │   │                   │   ├── location
+    │   │                   │   │   ├── Country.java
+    │   │                   │   │   ├── CountryTimezone.java
+    │   │                   │   │   └── CountryTimezoneId.java
+    │   │                   │   ├── media
+    │   │                   │   │   ├── BusinessImage.java
+    │   │                   │   │   ├── BusinessImageId.java
+    │   │                   │   │   ├── Image.java
+    │   │                   │   │   ├── ServiceImage.java
+    │   │                   │   │   ├── ServiceImageId.java
+    │   │                   │   │   ├── SubserviceImage.java
+    │   │                   │   │   └── SubserviceImageId.java
+    │   │                   │   ├── schedules
+    │   │                   │   │   ├── ExceptionIntervalType.java
+    │   │                   │   │   ├── business
+    │   │                   │   │   │   ├── Business.java
+    │   │                   │   │   │   ├── BusinessRepository.java
+    │   │                   │   │   │   ├── BusinessSchedule.java
+    │   │                   │   │   │   ├── BusinessScheduleRepository.java
+    │   │                   │   │   │   ├── dto
+    │   │                   │   │   │   │   ├── request
+    │   │                   │   │   │   │   └── response
+    │   │                   │   │   │   └── exception
+    │   │                   │   │   │       ├── BusinessExceptionInterval.java
+    │   │                   │   │   │       ├── BusinessExceptionIntervalRepository.java
+    │   │                   │   │   │       ├── BusinessScheduleException.java
+    │   │                   │   │   │       └── BusinessScheduleExceptionRepository.java
+    │   │                   │   │   └── employee
+    │   │                   │   │       ├── Employee.java
+    │   │                   │   │       ├── EmployeeRepository.java
+    │   │                   │   │       ├── EmployeeSchedule.java
+    │   │                   │   │       ├── EmployeeScheduleRepository.java
+    │   │                   │   │       ├── dto
+    │   │                   │   │       │   ├── request
+    │   │                   │   │       │   └── response
+    │   │                   │   │       └── exception
+    │   │                   │   │           ├── EmployeeExceptionInterval.java
+    │   │                   │   │           ├── EmployeeExceptionIntervalRepository.java
+    │   │                   │   │           ├── EmployeeScheduleException.java
+    │   │                   │   │           └── EmployeeScheduleExceptionRepository.java
+    │   │                   │   ├── services
+    │   │                   │   │   ├── EmployeeSubservice.java
+    │   │                   │   │   ├── EmployeeSubserviceId.java
+    │   │                   │   │   ├── EmployeeSubserviceRepository.java
+    │   │                   │   │   ├── Service.java
+    │   │                   │   │   ├── ServiceRepository.java
+    │   │                   │   │   ├── Subservice.java
+    │   │                   │   │   └── SubserviceRepository.java
+    │   │                   │   └── test
+    │   │                   │       └── TestController.java
+    │   │                   └── utilsCommon
+    │   │                       └── ValidationUtils.java
+    │   └── resources
+    │       ├── application.properties
+    │       └── db
+    │           └── migration
+    │               ├── V1__init_schema.sql
+    │               ├── V2__create_countries_and_timezones.sql
+    │               ├── V3__seed_categories.sql
+    │               ├── V4__seed_user_business_test.sql
+    │               ├── V5__change_booking_status_to_text.sql
+    │               ├── V6__seed_business_schedule_sharp_studio_barber.sql
+    │               ├── V7__add_user_profile_and_roles.sql
+    │               └── V8__add_verification_columns_to_users.sql
+    └── test
+        └── java
+            └── dev
+                └── esanchez
+                    └── timely
+                        └── backend
+                            ├── TimelyBackendApplicationTests.java
+                            └── service
+                                └── BookingServiceTest.java
+
+145 directories, 260 files

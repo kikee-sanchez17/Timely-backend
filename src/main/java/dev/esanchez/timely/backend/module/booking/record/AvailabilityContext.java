@@ -1,7 +1,7 @@
 package dev.esanchez.timely.backend.module.booking.record;
 
-import dev.esanchez.timely.backend.module.schedules.business.Business;
-import dev.esanchez.timely.backend.module.schedules.employee.Employee;
+import dev.esanchez.timely.backend.module.business.Business;
+import dev.esanchez.timely.backend.module.employee.Employee;
 import dev.esanchez.timely.backend.module.services.Subservice;
 
 import java.time.LocalDate;

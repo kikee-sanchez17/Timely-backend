@@ -1,7 +1,7 @@
-package dev.esanchez.timely.backend.module.schedules.employee.exception;
+package dev.esanchez.timely.backend.module.employee.exception;
 
-import dev.esanchez.timely.backend.module.schedules.employee.Employee;
-import dev.esanchez.timely.backend.utilsCommon.ValidationUtils;
+import dev.esanchez.timely.backend.module.employee.Employee;
+import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 

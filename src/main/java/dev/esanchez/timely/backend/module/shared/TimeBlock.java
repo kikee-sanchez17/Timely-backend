@@ -1,4 +1,4 @@
-package dev.esanchez.timely.backend.module.common;
+package dev.esanchez.timely.backend.module.shared;
 
 import java.time.OffsetDateTime;
 

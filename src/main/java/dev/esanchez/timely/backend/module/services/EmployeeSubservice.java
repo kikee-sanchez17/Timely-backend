@@ -1,6 +1,6 @@
 package dev.esanchez.timely.backend.module.services;
 
-import dev.esanchez.timely.backend.module.schedules.employee.Employee;
+import dev.esanchez.timely.backend.module.employee.Employee;
 import jakarta.persistence.*;
 
 @Entity

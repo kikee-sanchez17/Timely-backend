@@ -1,7 +1,7 @@
-package dev.esanchez.timely.backend.module.schedules.employee;
+package dev.esanchez.timely.backend.module.employee;
 
-import dev.esanchez.timely.backend.module.schedules.business.Business;
-import dev.esanchez.timely.backend.utilsCommon.ValidationUtils;
+import dev.esanchez.timely.backend.module.business.Business;
+import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 

@@ -2,14 +2,14 @@ package dev.esanchez.timely.backend.module.booking.bookingUtils;
 
 import dev.esanchez.timely.backend.module.booking.Booking;
 import dev.esanchez.timely.backend.module.booking.dto.response.AvailableSlotDTO;
-import dev.esanchez.timely.backend.module.common.TimeBlock;
+import dev.esanchez.timely.backend.module.shared.TimeBlock;
 
 import java.time.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import static dev.esanchez.timely.backend.utilsCommon.ValidationUtils.toOffsetDateTime;
+import static dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils.toOffsetDateTime;
 
 public final class BookingUtils {
 

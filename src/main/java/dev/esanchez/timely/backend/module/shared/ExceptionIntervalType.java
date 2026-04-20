@@ -1,4 +1,4 @@
-package dev.esanchez.timely.backend.module.schedules;
+package dev.esanchez.timely.backend.module.shared;
 
 public enum ExceptionIntervalType {
     CLOSED_INTERVAL,

@@ -1,6 +1,6 @@
 package dev.esanchez.timely.backend.module.identity;
 
-import dev.esanchez.timely.backend.utilsCommon.ValidationUtils;
+import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;

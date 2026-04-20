@@ -1,22 +1,23 @@
-package dev.esanchez.timely.backend.module.schedules.employee;
+package dev.esanchez.timely.backend.module.business;
 
-import dev.esanchez.timely.backend.utilsCommon.ValidationUtils;
+import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
 
+
 @Entity
-@Table(name = "employee_schedule")
-public class EmployeeSchedule {
+@Table(name = "business_schedule")
+public class BusinessSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "employee_schedule_id", nullable = false)
-    private Long employeeScheduleId;
+    @Column(name = "business_schedule_id", nullable = false)
+    private Long businessScheduleId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "employee_id", nullable = false)
-    private Employee employee;
+    @JoinColumn(name = "business_id", nullable = false)
+    private Business business;
 
     @Column(name = "day_of_week", nullable = false)
     private Short dayOfWeek;
@@ -27,15 +28,15 @@ public class EmployeeSchedule {
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
-    public EmployeeSchedule() {
+    public BusinessSchedule() {
     }
 
-    public EmployeeSchedule(Employee employee,
+    public BusinessSchedule(Business business,
                             Short dayOfWeek,
                             LocalTime startTime,
                             LocalTime endTime) {
 
-        this.employee = ValidationUtils.requireNonNull(employee, "Employee cannot be null");
+        this.business = ValidationUtils.requireNonNull(business, "Business cannot be null");
         this.dayOfWeek = validateDayOfWeek(dayOfWeek);
         this.startTime = ValidationUtils.requireNonNull(startTime, "Start time");
         this.endTime = ValidationUtils.requireNonNull(endTime, "End time");
@@ -45,12 +46,12 @@ public class EmployeeSchedule {
 
     // Getters
 
-    public Long getEmployeeScheduleId() {
-        return employeeScheduleId;
+    public Long getBusinessScheduleId() {
+        return businessScheduleId;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public Business getBusiness() {
+        return business;
     }
 
     public Short getDayOfWeek() {
@@ -65,11 +66,7 @@ public class EmployeeSchedule {
         return endTime;
     }
 
-    // Domain Methods
-
-    public void updateDayOfWeek(Short dayOfWeek) {
-        this.dayOfWeek = validateDayOfWeek(dayOfWeek);
-    }
+    // Setters
 
     public void updateTimeRange(LocalTime startTime, LocalTime endTime) {
         LocalTime validatedStart = ValidationUtils.requireNonNull(startTime, "Start time");
@@ -81,6 +78,10 @@ public class EmployeeSchedule {
         this.endTime = validatedEnd;
     }
 
+    public void updateDayOfWeek(Short dayOfWeek) {
+        this.dayOfWeek = validateDayOfWeek(dayOfWeek);
+    }
+
     // Validations
 
     private Short validateDayOfWeek(Short day) {
@@ -88,5 +89,9 @@ public class EmployeeSchedule {
             throw new IllegalArgumentException("Day of week must be between 0 and 6");
         }
         return day;
+    }
+
+    public void setStartTime(LocalTime of) {
+        this.startTime = of;
     }
 }

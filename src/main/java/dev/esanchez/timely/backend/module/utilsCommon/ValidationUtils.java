@@ -1,4 +1,4 @@
-package dev.esanchez.timely.backend.utilsCommon;
+package dev.esanchez.timely.backend.module.utilsCommon;
 
 import java.time.*;
 

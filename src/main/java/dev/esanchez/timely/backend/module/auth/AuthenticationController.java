@@ -1,5 +1,6 @@
 package dev.esanchez.timely.backend.module.auth;
 
+import dev.esanchez.timely.backend.module.auth.dto.request.ResendCodeRequest;
 import dev.esanchez.timely.backend.module.auth.dto.request.VerifyUserRequest;
 import dev.esanchez.timely.backend.module.auth.dto.response.VerifyUserResponse;
 import dev.esanchez.timely.backend.module.identity.dto.request.LoginUserRequest;
@@ -55,10 +56,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/resend")
-    public ResponseEntity<?> resendVerificationCode(@RequestParam String email) {
+    public ResponseEntity<?> resendVerificationCode(@RequestBody ResendCodeRequest resendCodeRequest) {
         try {
-            authenticationService.resendVerificationCode(email);
-            return ResponseEntity.ok("Verification code sent");
+            authenticationService.resendVerificationCode(resendCodeRequest.getEmail());
+            return ResponseEntity.ok().build();
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

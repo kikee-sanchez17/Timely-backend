@@ -1,8 +1,8 @@
-package dev.esanchez.timely.backend.module.schedules.business.exception;
+package dev.esanchez.timely.backend.module.employee.exception;
 
-import dev.esanchez.timely.backend.module.schedules.ExceptionIntervalType;
-import dev.esanchez.timely.backend.module.schedules.business.Business;
-import dev.esanchez.timely.backend.utilsCommon.ValidationUtils;
+import dev.esanchez.timely.backend.module.shared.ExceptionIntervalType;
+import dev.esanchez.timely.backend.module.employee.Employee;
+import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -12,17 +12,17 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 @Entity
-@Table(name = "business_exception_intervals")
-public class BusinessExceptionInterval {
+@Table(name = "employee_exception_intervals")
+public class EmployeeExceptionInterval {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "business_exception_interval_id", nullable = false)
-    private Long businessExceptionIntervalId;
+    @Column(name = "employee_exception_interval_id", nullable = false)
+    private Long employeeExceptionIntervalId;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "business_id", nullable = false)
-    private Business business;
+    @JoinColumn(name = "employee_id", nullable = false)
+    private Employee employee;
 
     @Column(name = "date", nullable = false)
     private LocalDate date;
@@ -48,17 +48,17 @@ public class BusinessExceptionInterval {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
-    public BusinessExceptionInterval() {
+    public EmployeeExceptionInterval() {
     }
 
-    public BusinessExceptionInterval(Business business,
+    public EmployeeExceptionInterval(Employee employee,
                                      LocalDate date,
                                      LocalTime startTime,
                                      LocalTime endTime,
                                      ExceptionIntervalType intervalType,
                                      String reason) {
 
-        this.business = ValidationUtils.requireNonNull(business, "Business cannot be null");
+        this.employee = ValidationUtils.requireNonNull(employee, "Employee cannot be null");
         this.date = ValidationUtils.requireNonNull(date, "Date cannot be null");
 
         LocalTime validatedStart = ValidationUtils.requireNonNull(startTime, "Start time cannot be null");
@@ -71,12 +71,12 @@ public class BusinessExceptionInterval {
         this.reason = ValidationUtils.normalizeOptionalText(reason);
     }
 
-    public Long getBusinessExceptionIntervalId() {
-        return businessExceptionIntervalId;
+    public Long getEmployeeExceptionIntervalId() {
+        return employeeExceptionIntervalId;
     }
 
-    public Business getBusiness() {
-        return business;
+    public Employee getEmployee() {
+        return employee;
     }
 
     public LocalDate getDate() {
@@ -94,8 +94,6 @@ public class BusinessExceptionInterval {
     public ExceptionIntervalType getIntervalType() {
         return intervalType;
     }
-
-
 
     public String getReason() {
         return reason;

@@ -1,8 +1,8 @@
-package dev.esanchez.timely.backend.module.schedules.business;
+package dev.esanchez.timely.backend.module.business;
 import dev.esanchez.timely.backend.module.categories.Category;
 import dev.esanchez.timely.backend.module.location.CountryTimezone;
 import dev.esanchez.timely.backend.module.identity.User;
-import dev.esanchez.timely.backend.utilsCommon.ValidationUtils;
+import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.OffsetDateTime;

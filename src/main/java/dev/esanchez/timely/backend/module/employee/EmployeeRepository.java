@@ -1,4 +1,4 @@
-package dev.esanchez.timely.backend.module.schedules.employee;
+package dev.esanchez.timely.backend.module.employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.*;
 
