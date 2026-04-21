@@ -1,5 +1,9 @@
 package dev.esanchez.timely.backend.module.auth;
 
+import dev.esanchez.timely.backend.core.globalException.customGlobalException.NotFoundException;
+import dev.esanchez.timely.backend.core.handleException.customHandleException.BadRequestException;
+import dev.esanchez.timely.backend.core.jwt.JwtService;
+import dev.esanchez.timely.backend.core.security.CustomUserDetails;
 import dev.esanchez.timely.backend.module.auth.dto.request.VerifyUserRequest;
 import dev.esanchez.timely.backend.module.identity.dto.request.LoginUserRequest;
 import dev.esanchez.timely.backend.module.identity.dto.request.RegisterUserRequest;
@@ -11,6 +15,7 @@ import dev.esanchez.timely.backend.module.identity.RoleRepository;
 import dev.esanchez.timely.backend.module.identity.UserRepository;
 import dev.esanchez.timely.backend.module.identity.UserRoleRepository;
 import dev.esanchez.timely.backend.core.email.EmailService;
+import dev.esanchez.timely.backend.module.identity.dto.response.LoginResponse;
 import jakarta.mail.MessagingException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -28,6 +33,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final JwtService jwtService;
 
     public AuthenticationService(
             UserRepository userRepository,
@@ -35,7 +41,8 @@ public class AuthenticationService {
             UserRoleRepository userRoleRepository,
             AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
-            EmailService emailService
+            EmailService emailService,
+            JwtService jwtService
     ) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
@@ -43,6 +50,7 @@ public class AuthenticationService {
         this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
         this.emailService = emailService;
+        this.jwtService = jwtService;
     }
 
     //Creates user but it is not valid until its verified
@@ -56,12 +64,12 @@ public class AuthenticationService {
     }
 
     //Checks if user is verified, if so return user object
-    public User authenticate(LoginUserRequest input) {
+    public LoginResponse authenticate(LoginUserRequest input) {
         User user = userRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException("User not found with email: ",input.getEmail()));
 
         if (!user.getIsActive()) {
-            throw new RuntimeException("Account not verified. Please verify your account.");
+            throw new BadRequestException("Account not verified. Please verify your account.");
         }
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -70,7 +78,10 @@ public class AuthenticationService {
                 )
         );
 
-        return user;
+        CustomUserDetails customUserDetails = new CustomUserDetails(user);
+        String jwtToken = jwtService.generateToken(customUserDetails);
+
+        return new LoginResponse(jwtToken,jwtService.getExpirationTime());
     }
 
     //Function to verify the user with verification code
@@ -81,7 +92,7 @@ public class AuthenticationService {
             User user = optionalUser.get();
             //Checks if the verification code is expired
             if (user.getVerificationCodeExpiresAt().isBefore(OffsetDateTime.now())) {
-                throw new RuntimeException("Verification code has expired");
+                throw new BadRequestException("Verification code has expired");
             }
             if (user.getVerificationCode().equals(input.getVerificationCode())) {
                 //Set Customer Role to user
@@ -91,10 +102,10 @@ public class AuthenticationService {
                 user.setVerificationCodeExpiresAt(null);
                 userRepository.save(user);
             } else {
-                throw new RuntimeException("Invalid verification code");
+                throw new BadRequestException("Invalid verification code");
             }
         } else {
-            throw new RuntimeException("User not found");
+            throw new NotFoundException("User");
         }
     }
 
@@ -104,14 +115,14 @@ public class AuthenticationService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             if (user.getIsActive()) {
-                throw new RuntimeException("Account is already verified");
+                throw new BadRequestException("User");
             }
             user.setVerificationCode(generateVerificationCode());
             user.setVerificationCodeExpiresAt(OffsetDateTime.now().plusHours(1));
             sendVerificationEmail(user);
             userRepository.save(user);
         } else {
-            throw new RuntimeException("User not found");
+            throw new NotFoundException("User");
         }
     }
     //Makes the email body and send it to the user
@@ -146,7 +157,7 @@ public class AuthenticationService {
     }
     //This function sets Role to User (Consider moving this function to a utility package)
     private void setRoleToUser(User user, VerifyUserRequest input,Long RoleId) {
-        Role role = roleRepository.findById(RoleId).orElseThrow(() -> new RuntimeException("Role not found"));
+        Role role = roleRepository.findById(RoleId).orElseThrow(() -> new NotFoundException("Role"));
         UserRoleId userRoleId = new UserRoleId(user.getUserId(), role.getRoleId());
         if (user.getVerificationCode().equals(input.getVerificationCode())) {
             if (!userRoleRepository.existsById(userRoleId)) {

@@ -3,8 +3,14 @@ package dev.esanchez.timely.backend.module.media;
 import dev.esanchez.timely.backend.module.business.Business;
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "business_images")
 public class BusinessImage {
 
@@ -21,27 +27,4 @@ public class BusinessImage {
     @JoinColumn(name = "image_id", nullable = false)
     private Image image;
 
-    protected BusinessImage() {
-    }
-
-    public BusinessImage(Business business, Image image) {
-        this.business = ValidationUtils.requireNonNull(business,"Business");
-        this.image = ValidationUtils.requireNonNull(image,"Image");
-        this.id = new BusinessImageId(
-                business.getBusinessId(),
-                image.getImageId()
-        );
-    }
-
-    public Business getBusiness() {
-        return business;
-    }
-
-    public Image getImage() {
-        return image;
-    }
-
-    public BusinessImageId getId() {
-        return id;
-    }
 }

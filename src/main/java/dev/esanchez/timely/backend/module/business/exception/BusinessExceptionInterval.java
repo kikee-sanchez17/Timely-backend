@@ -1,9 +1,10 @@
-package dev.esanchez.timely.backend.module.business.business.exception;
+package dev.esanchez.timely.backend.module.business.exception;
 
 import dev.esanchez.timely.backend.module.shared.ExceptionIntervalType;
 import dev.esanchez.timely.backend.module.business.Business;
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,6 +13,11 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "business_exception_intervals")
 public class BusinessExceptionInterval {
 
@@ -48,70 +54,8 @@ public class BusinessExceptionInterval {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
-    public BusinessExceptionInterval() {
-    }
-
-    public BusinessExceptionInterval(Business business,
-                                     LocalDate date,
-                                     LocalTime startTime,
-                                     LocalTime endTime,
-                                     ExceptionIntervalType intervalType,
-                                     String reason) {
-
-        this.business = ValidationUtils.requireNonNull(business, "Business cannot be null");
-        this.date = ValidationUtils.requireNonNull(date, "Date cannot be null");
-
-        LocalTime validatedStart = ValidationUtils.requireNonNull(startTime, "Start time cannot be null");
-        LocalTime validatedEnd = ValidationUtils.requireNonNull(endTime, "End time cannot be null");
-        ValidationUtils.validateTimeRange(validatedStart, validatedEnd);
-
-        this.startTime = validatedStart;
-        this.endTime = validatedEnd;
-        this.intervalType = ValidationUtils.requireNonNull(intervalType, "Interval type cannot be null");
-        this.reason = ValidationUtils.normalizeOptionalText(reason);
-    }
-
-    public Long getBusinessExceptionIntervalId() {
-        return businessExceptionIntervalId;
-    }
-
-    public Business getBusiness() {
-        return business;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public ExceptionIntervalType getIntervalType() {
-        return intervalType;
-    }
 
 
-
-    public String getReason() {
-        return reason;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public OffsetDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void updateDate(LocalDate date) {
-        this.date = ValidationUtils.requireNonNull(date, "Date cannot be null");
-    }
 
     public void updateTimeRange(LocalTime startTime, LocalTime endTime) {
         LocalTime validatedStart = ValidationUtils.requireNonNull(startTime, "Start time cannot be null");
@@ -123,13 +67,6 @@ public class BusinessExceptionInterval {
         this.endTime = validatedEnd;
     }
 
-    public void updateIntervalType(ExceptionIntervalType intervalType) {
-        this.intervalType = ValidationUtils.requireNonNull(intervalType, "Interval type cannot be null");
-    }
-
-    public void updateReason(String reason) {
-        this.reason = ValidationUtils.normalizeOptionalText(reason);
-    }
 
 
 }

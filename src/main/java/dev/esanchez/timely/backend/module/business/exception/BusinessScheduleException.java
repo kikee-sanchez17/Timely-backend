@@ -3,12 +3,18 @@ package dev.esanchez.timely.backend.module.business.exception;
 import dev.esanchez.timely.backend.module.business.Business;
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "business_schedule_exceptions")
 public class BusinessScheduleException {
 
@@ -31,44 +37,5 @@ public class BusinessScheduleException {
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    public BusinessScheduleException() {
-    }
-
-    public BusinessScheduleException(Business business,
-                                     LocalDate date,
-                                     String reason) {
-
-        this.business = ValidationUtils.requireNonNull(business, "Business cannot be null");
-        this.date = ValidationUtils.requireNonNull(date, "Date cannot be null");
-        this.reason = ValidationUtils.normalizeOptionalText(reason);
-    }
-
-    // Getters
-
-    public Long getBusinessScheduleExceptionId() {
-        return businessScheduleExceptionId;
-    }
-
-    public Business getBusiness() {
-        return business;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    // Domain Methods
-
-    public void updateReason(String reason) {
-        this.reason = ValidationUtils.normalizeOptionalText(reason);
-    }
 
 }

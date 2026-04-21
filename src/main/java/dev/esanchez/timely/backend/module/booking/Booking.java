@@ -5,12 +5,18 @@ import dev.esanchez.timely.backend.module.services.Subservice;
 import dev.esanchez.timely.backend.module.identity.User;
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.OffsetDateTime;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "bookings")
 public class Booking {
 
@@ -55,80 +61,8 @@ public class Booking {
     @Column(name = "cancel_reason")
     private String cancelReason;
 
-    public Booking() {
-    }
 
-    public Booking(OffsetDateTime startDatetime,
-                   OffsetDateTime endDatetime,
-                   Subservice subservice,
-                   User customerUser,
-                   Employee employee,
-                   String notes) {
 
-        OffsetDateTime validatedStart =
-                ValidationUtils.requireNonNull(startDatetime, "Start datetime cannot be null");
-        OffsetDateTime validatedEnd =
-                ValidationUtils.requireNonNull(endDatetime, "End datetime cannot be null");
-
-        validateDateTimeRange(validatedStart, validatedEnd);
-
-        this.startDatetime = validatedStart;
-        this.endDatetime = validatedEnd;
-        this.subservice = ValidationUtils.requireNonNull(subservice, "Subservice cannot be null");
-        this.customerUser = ValidationUtils.requireNonNull(customerUser, "Customer user cannot be null");
-        this.employee = ValidationUtils.requireNonNull(employee, "Employee cannot be null");
-        this.status = BookingStatus.PENDING;
-        this.notes = ValidationUtils.normalizeOptionalText(notes);
-        this.cancelReason = null;
-    }
-
-    public Long getBookingId() {
-        return bookingId;
-    }
-
-    public OffsetDateTime getStartDatetime() {
-        return startDatetime;
-    }
-
-    public OffsetDateTime getEndDatetime() {
-        return endDatetime;
-    }
-
-    public Subservice getSubservice() {
-        return subservice;
-    }
-
-    public User getCustomerUser() {
-        return customerUser;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public BookingStatus getStatus() {
-        return status;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public OffsetDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public String getNotes() {
-        return notes;
-    }
-
-    public String getCancelReason() {
-        return cancelReason;
-    }
-
-    public void updateNotes(String notes) {
-        this.notes = ValidationUtils.normalizeOptionalText(notes);
-    }
 
     public void reschedule(OffsetDateTime startDatetime, OffsetDateTime endDatetime) {
         OffsetDateTime validatedStart =
@@ -177,30 +111,6 @@ public class Booking {
         }
         this.status = BookingStatus.CANCELLED_BY_BUSINESS;
         this.cancelReason = ValidationUtils.normalizeOptionalText(cancelReason);
-    }
-
-
-    public void setSubservice(Subservice subservice) {
-        this.subservice = subservice;
-    }
-
-    public void setCustomerUser(User customerUser) {
-        this.customerUser = customerUser;
-    }
-
-    public void setNotes(String notes) {
-        this.notes = notes;
-    }
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
-    }
-
-    public void setStartDatetime(OffsetDateTime startDatetime) {
-        this.startDatetime = startDatetime;
-    }
-
-    public void setEndDatetime(OffsetDateTime endDatetime) {
-        this.endDatetime = endDatetime;
     }
 
     private void validateDateTimeRange(OffsetDateTime startDatetime, OffsetDateTime endDatetime) {

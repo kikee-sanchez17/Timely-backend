@@ -1,14 +1,17 @@
 package dev.esanchez.timely.backend.core.globalException.customGlobalException;
 
-import org.springframework.stereotype.Component;
 
-
-@Component
 public class NotFoundException extends RuntimeException {
 
     public NotFoundException() {}
 
-    public NotFoundException(String msg , Long employeeId) {
-        super( msg + employeeId);
+    public NotFoundException(String msg , Long Id) {
+        super( msg + Id);
+    }
+    public NotFoundException(String msg , String field) {
+        super( msg + field);
+    }
+    public NotFoundException(String entity){
+        super(entity+" Not Found.");
     }
 }

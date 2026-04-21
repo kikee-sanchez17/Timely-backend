@@ -3,11 +3,17 @@ package dev.esanchez.timely.backend.module.services;
 import dev.esanchez.timely.backend.module.business.Business;
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "services")
 public class Service {
 
@@ -33,54 +39,6 @@ public class Service {
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    public Service() {
-    }
-
-    public Service(Business business,
-                   String name,
-                   String description) {
-
-        this.business = ValidationUtils.requireNonNull(business, "Business cannot be null");
-        this.name = ValidationUtils.validateText(name, "Name");
-        this.description = ValidationUtils.normalizeOptionalText(description);
-        this.isActive = true;
-    }
-
-    // Getters
-
-    public Long getServiceId() {
-        return serviceId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Business getBusiness() {
-        return business;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Boolean isActive() {
-        return isActive;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    // Domain Methods
-
-    public void updateName(String name) {
-        this.name = ValidationUtils.validateText(name, "Name");
-    }
-
-    public void updateDescription(String description) {
-        this.description = ValidationUtils.normalizeOptionalText(description);
-    }
 
     public void activate() {
         this.isActive = true;

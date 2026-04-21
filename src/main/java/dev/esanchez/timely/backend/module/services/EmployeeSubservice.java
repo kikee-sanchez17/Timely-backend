@@ -2,8 +2,14 @@ package dev.esanchez.timely.backend.module.services;
 
 import dev.esanchez.timely.backend.module.employee.Employee;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "employee_subservices")
 public class EmployeeSubservice {
 
@@ -20,27 +26,4 @@ public class EmployeeSubservice {
     @JoinColumn(name = "subservice_id", nullable = false)
     private Subservice subservice;
 
-    public EmployeeSubservice() {
-    }
-
-    public EmployeeSubservice(Employee employee, Subservice subservice) {
-        this.employee = employee;
-        this.subservice = subservice;
-        this.id = new EmployeeSubserviceId(
-                subservice.getSubserviceId(),
-                employee.getEmployeeId()
-        );
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public Subservice getSubservice() {
-        return subservice;
-    }
-
-    public EmployeeSubserviceId getId() {
-        return id;
-    }
 }

@@ -1,31 +1,21 @@
 package dev.esanchez.timely.backend.module.media;
 
 import jakarta.persistence.Embeddable;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class ServiceImageId implements Serializable {
 
     private Long serviceId;
     private Long imageId;
-
-    public ServiceImageId() {
-    }
-
-    public ServiceImageId(Long serviceId, Long imageId) {
-        this.serviceId = serviceId;
-        this.imageId = imageId;
-    }
-
-    public Long getServiceId() {
-        return serviceId;
-    }
-
-    public Long getImageId() {
-        return imageId;
-    }
 
     @Override
     public boolean equals(Object o) {

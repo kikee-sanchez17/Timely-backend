@@ -1,5 +1,10 @@
 package dev.esanchez.timely.backend.module.identity.dto.response;
 
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+
+@Data
 public class LoginResponse {
     private String token;
     private long expiresIn;
@@ -9,11 +14,4 @@ public class LoginResponse {
         this.expiresIn = expiresIn;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public long getExpiresIn() {
-        return expiresIn;
-    }
 }

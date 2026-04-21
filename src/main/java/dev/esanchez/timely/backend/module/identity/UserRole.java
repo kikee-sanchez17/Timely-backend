@@ -1,8 +1,14 @@
 package dev.esanchez.timely.backend.module.identity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "user_roles")
 public class UserRole {
 
@@ -19,28 +25,8 @@ public class UserRole {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    public UserRole(){}
-
-    public UserRole(User user, Role role){
+    public  UserRole(User user, Role role) {
         this.user = user;
         this.role = role;
-        this.id = new UserRoleId(user.getUserId(), role.getRoleId());
-
     }
-    public UserRoleId getId() {
-        return id;
-    }
-    public User getUser() {
-        return user;
-    }
-    public void updateUser(User user) {
-        this.user = user;
-    }
-    public Role getRole() {
-        return role;
-    }
-    public void updateRole(Role role) {
-        this.role = role;
-    }
-
 }

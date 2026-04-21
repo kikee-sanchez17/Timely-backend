@@ -1,31 +1,21 @@
 package dev.esanchez.timely.backend.module.services;
 
 import jakarta.persistence.Embeddable;
+import lombok.*;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class EmployeeSubserviceId implements Serializable {
 
     private Long subserviceId;
     private Long employeeId;
-
-    public EmployeeSubserviceId() {
-    }
-
-    public EmployeeSubserviceId(Long subserviceId, Long employeeId) {
-        this.subserviceId = subserviceId;
-        this.employeeId = employeeId;
-    }
-
-    public Long getSubserviceId() {
-        return subserviceId;
-    }
-
-    public Long getEmployeeId() {
-        return employeeId;
-    }
 
     @Override
     public boolean equals(Object o) {

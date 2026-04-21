@@ -3,11 +3,17 @@ package dev.esanchez.timely.backend.module.media;
 import dev.esanchez.timely.backend.module.identity.User;
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "images")
 public class Image {
 
@@ -30,47 +36,4 @@ public class Image {
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    protected Image() {
-    }
-
-    public Image(String path,
-                 String altText,
-                 User uploadedBy) {
-
-        this.path = ValidationUtils.validateText(path, "Path");
-        this.altText = ValidationUtils.normalizeOptionalText(altText);
-        this.uploadedBy = ValidationUtils.requireNonNull(uploadedBy, "User cannot be null");
-    }
-
-    // Getters
-
-    public Long getImageId() {
-        return imageId;
-    }
-
-    public String getPath() {
-        return path;
-    }
-
-    public String getAltText() {
-        return altText;
-    }
-
-    public User getUploadedBy() {
-        return uploadedBy;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    // Domain Methods
-
-    public void updateAltText(String altText) {
-        this.altText = ValidationUtils.normalizeOptionalText(altText);
-    }
-
-    public void updatePath(String path) {
-        this.path = ValidationUtils.validateText(path, "Path");
-    }
 }

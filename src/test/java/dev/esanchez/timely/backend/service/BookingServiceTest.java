@@ -11,7 +11,7 @@ import dev.esanchez.timely.backend.module.business.Business;
 import dev.esanchez.timely.backend.module.business.BusinessSchedule;
 import dev.esanchez.timely.backend.module.business.BusinessScheduleRepository;
 import dev.esanchez.timely.backend.module.shared.ExceptionIntervalType;
-import dev.esanchez.timely.backend.module.business.business.exception.BusinessExceptionInterval;
+import dev.esanchez.timely.backend.module.business.exception.BusinessExceptionInterval;
 import dev.esanchez.timely.backend.module.business.exception.BusinessExceptionIntervalRepository;
 import dev.esanchez.timely.backend.module.business.exception.BusinessScheduleExceptionRepository;
 import dev.esanchez.timely.backend.module.employee.Employee;
@@ -115,7 +115,7 @@ class BookingServiceTest {
                 eq(2L), any(), any()))
                 .thenReturn(List.of());
 
-        List<AvailableSlotDTO> result = bookingService.getAvailableSlots(request);
+        List<AvailableSlotDTO> result = bookingService.calculateAvailableSlots(request);
 
         assertThat(result).hasSize(16);
     }
@@ -216,7 +216,7 @@ class BookingServiceTest {
                 eq(2L), any(), any()))
                 .thenReturn(List.of(booking));
 
-        List<AvailableSlotDTO> result = bookingService.getAvailableSlots(request);
+        List<AvailableSlotDTO> result = bookingService.calculateAvailableSlots(request);
 
         assertThat(result).hasSize(7);
     }
@@ -267,7 +267,7 @@ class BookingServiceTest {
                 eq(2L), any(), any()))
                 .thenReturn(List.of(booking));
 
-        List<AvailableSlotDTO> result = bookingService.getAvailableSlots(request);
+        List<AvailableSlotDTO> result = bookingService.calculateAvailableSlots(request);
 
         assertThat(result).hasSize(7);
 
@@ -343,7 +343,7 @@ class BookingServiceTest {
                 eq(2L), any(), any()))
                 .thenReturn(List.of(booking,booking2));
 
-        List<AvailableSlotDTO> result = bookingService.getAvailableSlots(request);
+        List<AvailableSlotDTO> result = bookingService.calculateAvailableSlots(request);
 
         assertThat(result).hasSize(5);
     }
@@ -395,7 +395,7 @@ class BookingServiceTest {
                 .thenReturn(List.of(booking));
 
         // Act
-        List<AvailableSlotDTO> result = bookingService.getAvailableSlots(request);
+        List<AvailableSlotDTO> result = bookingService.calculateAvailableSlots(request);
 
         // Assert
         assertThat(result).isEmpty();
@@ -446,7 +446,7 @@ class BookingServiceTest {
                 eq(2L), any(), any()))
                 .thenReturn(List.of(booking));
 
-        List<AvailableSlotDTO> result = bookingService.getAvailableSlots(request);
+        List<AvailableSlotDTO> result = bookingService.calculateAvailableSlots(request);
 
         assertThat(result).hasSize(1);
 
@@ -512,7 +512,7 @@ class BookingServiceTest {
                 eq(2L), any(), any()))
                 .thenReturn(List.of(booking,booking2));
 
-        List<AvailableSlotDTO> result = bookingService.getAvailableSlots(request);
+        List<AvailableSlotDTO> result = bookingService.calculateAvailableSlots(request);
 
         assertThat(result).hasSize(13);
 
@@ -564,7 +564,7 @@ class BookingServiceTest {
                 eq(2L), any(), any()))
                 .thenReturn(List.of());
 
-        List<AvailableSlotDTO> result = bookingService.getAvailableSlots(request);
+        List<AvailableSlotDTO> result = bookingService.calculateAvailableSlots(request);
 
         assertThat(result).hasSize(4);
     }
@@ -605,7 +605,7 @@ class BookingServiceTest {
 
         // 3. Setup Excepción: El negocio cierra de 09:30 a 10:00 (FAKE BOOKING)
         BusinessExceptionInterval exception = new BusinessExceptionInterval();
-        exception.updateDate(date);
+        exception.setDate(date);
 
         exception.updateTimeRange(LocalTime.of(9, 30),LocalTime.of(10, 0));
         exception.updateIntervalType(ExceptionIntervalType.CLOSED_INTERVAL);
@@ -621,7 +621,7 @@ class BookingServiceTest {
                 .thenReturn(List.of()); // Sin bookings reales de momento
 
         // --- WHEN (Ejecución) ---;
-        List<AvailableSlotDTO> result = bookingService.getAvailableSlots(request);
+        List<AvailableSlotDTO> result = bookingService.calculateAvailableSlots(request);
 
         // --- THEN (Verificación) ---
         // Esperamos:

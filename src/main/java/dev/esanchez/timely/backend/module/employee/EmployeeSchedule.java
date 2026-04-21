@@ -2,10 +2,16 @@ package dev.esanchez.timely.backend.module.employee;
 
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalTime;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "employee_schedule")
 public class EmployeeSchedule {
 
@@ -27,49 +33,6 @@ public class EmployeeSchedule {
     @Column(name = "end_time", nullable = false)
     private LocalTime endTime;
 
-    public EmployeeSchedule() {
-    }
-
-    public EmployeeSchedule(Employee employee,
-                            Short dayOfWeek,
-                            LocalTime startTime,
-                            LocalTime endTime) {
-
-        this.employee = ValidationUtils.requireNonNull(employee, "Employee cannot be null");
-        this.dayOfWeek = validateDayOfWeek(dayOfWeek);
-        this.startTime = ValidationUtils.requireNonNull(startTime, "Start time");
-        this.endTime = ValidationUtils.requireNonNull(endTime, "End time");
-
-        ValidationUtils.validateTimeRange(this.startTime, this.endTime);
-    }
-
-    // Getters
-
-    public Long getEmployeeScheduleId() {
-        return employeeScheduleId;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public Short getDayOfWeek() {
-        return dayOfWeek;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    // Domain Methods
-
-    public void updateDayOfWeek(Short dayOfWeek) {
-        this.dayOfWeek = validateDayOfWeek(dayOfWeek);
-    }
 
     public void updateTimeRange(LocalTime startTime, LocalTime endTime) {
         LocalTime validatedStart = ValidationUtils.requireNonNull(startTime, "Start time");
@@ -81,12 +44,4 @@ public class EmployeeSchedule {
         this.endTime = validatedEnd;
     }
 
-    // Validations
-
-    private Short validateDayOfWeek(Short day) {
-        if (day == null || day < 0 || day > 6) {
-            throw new IllegalArgumentException("Day of week must be between 0 and 6");
-        }
-        return day;
-    }
 }

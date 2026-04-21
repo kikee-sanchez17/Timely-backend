@@ -3,12 +3,18 @@ package dev.esanchez.timely.backend.module.employee.exception;
 import dev.esanchez.timely.backend.module.employee.Employee;
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "employee_schedule_exceptions")
 public class EmployeeScheduleException {
 
@@ -31,44 +37,6 @@ public class EmployeeScheduleException {
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    public EmployeeScheduleException() {
-    }
 
-    public EmployeeScheduleException(Employee employee,
-                                     LocalDate date,
-                                     String reason) {
-
-        this.employee = ValidationUtils.requireNonNull(employee, "Employee cannot be null");
-        this.date = ValidationUtils.requireNonNull(date, "Date cannot be null");
-        this.reason = ValidationUtils.normalizeOptionalText(reason);
-    }
-
-    // Getters
-
-    public Long getEmployeeScheduleExceptionId() {
-        return employeeScheduleExceptionId;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    // Domain Methods
-
-    public void updateReason(String reason) {
-        this.reason = ValidationUtils.normalizeOptionalText(reason);
-    }
 
 }

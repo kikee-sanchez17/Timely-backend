@@ -1,7 +1,13 @@
 package dev.esanchez.timely.backend.module.location;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "countries")
 public class Country {
 
@@ -15,30 +21,4 @@ public class Country {
     @Column(name = "flag_emoji")
     private String flagEmoji;
 
-    public Country() {
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getNameEn() {
-        return nameEn;
-    }
-
-    public String getFlagEmoji() {
-        return flagEmoji;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setNameEn(String nameEn) {
-        this.nameEn = nameEn;
-    }
-
-    public void setFlagEmoji(String flagEmoji) {
-        this.flagEmoji = flagEmoji;
-    }
 }

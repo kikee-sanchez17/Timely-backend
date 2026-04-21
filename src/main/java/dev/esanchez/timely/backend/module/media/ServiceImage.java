@@ -3,8 +3,14 @@ package dev.esanchez.timely.backend.module.media;
 import dev.esanchez.timely.backend.module.services.Service;
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "service_images")
 public class ServiceImage {
 
@@ -21,27 +27,4 @@ public class ServiceImage {
     @JoinColumn(name = "image_id", nullable = false)
     private Image image;
 
-    protected ServiceImage() {
-    }
-
-    public ServiceImage(Service service, Image image) {
-        this.service = ValidationUtils.requireNonNull(service,"Service cannot be null");
-        this.image = ValidationUtils.requireNonNull(image,"Image cannot be null");
-        this.id = new ServiceImageId(
-                service.getServiceId(),
-                image.getImageId()
-        );
-    }
-
-    public ServiceImageId getId() {
-        return id;
-    }
-
-    public Service getService() {
-        return service;
-    }
-
-    public Image getImage() {
-        return image;
-    }
 }

@@ -1,8 +1,14 @@
 package dev.esanchez.timely.backend.module.identity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "roles")
 public class Role {
 
@@ -12,26 +18,4 @@ public class Role {
 
     @Column(name = "code", nullable = false)
     private String code;
-
-    public Role() {}
-
-    public Role(Long roleId, String code) {
-        this.roleId = roleId;
-        this.code = code;
-    }
-
-    public Long getRoleId() {
-        return roleId;
-    }
-    public void setRoleId(Long roleId) {
-        this.roleId = roleId;
-    }
-    public String getCode() {
-        return code;
-    }
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-
 }

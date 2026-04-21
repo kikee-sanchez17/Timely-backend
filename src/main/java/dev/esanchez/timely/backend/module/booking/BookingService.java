@@ -17,7 +17,7 @@ import dev.esanchez.timely.backend.module.identity.User;
 import dev.esanchez.timely.backend.module.identity.UserRepository;
 import dev.esanchez.timely.backend.module.business.BusinessSchedule;
 import dev.esanchez.timely.backend.module.business.BusinessScheduleRepository;
-import dev.esanchez.timely.backend.module.business.business.exception.BusinessExceptionInterval;
+import dev.esanchez.timely.backend.module.business.exception.BusinessExceptionInterval;
 import dev.esanchez.timely.backend.module.business.exception.BusinessExceptionIntervalRepository;
 import dev.esanchez.timely.backend.module.business.exception.BusinessScheduleExceptionRepository;
 import dev.esanchez.timely.backend.module.employee.Employee;

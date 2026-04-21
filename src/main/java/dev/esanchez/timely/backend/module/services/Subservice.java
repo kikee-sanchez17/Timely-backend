@@ -2,12 +2,18 @@ package dev.esanchez.timely.backend.module.services;
 
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "subservices")
 public class Subservice {
 
@@ -39,71 +45,6 @@ public class Subservice {
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    public Subservice() {
-    }
-
-    public Subservice(String name,
-                      String description,
-                      BigDecimal price,
-                      Integer durationMinutes,
-                      Service service) {
-
-        this.name = ValidationUtils.validateText(name, "Name");
-        this.description = ValidationUtils.normalizeOptionalText(description);
-        this.price = validatePrice(price);
-        this.durationMinutes = validateDurationMinutes(durationMinutes);
-        this.service = ValidationUtils.requireNonNull(service, "Service cannot be null");
-        this.isActive = true;
-    }
-
-    public Long getSubserviceId() {
-        return subserviceId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public Integer getDurationMinutes() {
-        return durationMinutes;
-    }
-
-    public Service getService() {
-        return service;
-    }
-
-    public Boolean isActive() {
-        return isActive;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void updateName(String name) {
-        this.name = ValidationUtils.validateText(name, "Name");
-    }
-
-    public void updateDescription(String description) {
-        this.description = ValidationUtils.normalizeOptionalText(description);
-    }
-
-    public void updatePrice(BigDecimal price) {
-        this.price = validatePrice(price);
-    }
-
-    public void updateDurationMinutes(Integer durationMinutes) {
-        this.durationMinutes = validateDurationMinutes(durationMinutes);
-    }
-
     public void activate() {
         this.isActive = true;
     }
@@ -112,31 +53,4 @@ public class Subservice {
         this.isActive = false;
     }
 
-    private BigDecimal validatePrice(BigDecimal price) {
-        if (price == null) {
-            return null;
-        }
-        if (price.compareTo(BigDecimal.ZERO) < 0) {
-            throw new IllegalArgumentException("Price cannot be negative");
-        }
-        return price;
-    }
-
-    private Integer validateDurationMinutes(Integer durationMinutes) {
-        if (durationMinutes == null) {
-            throw new IllegalArgumentException("Duration minutes cannot be null");
-        }
-        if (durationMinutes <= 0) {
-            throw new IllegalArgumentException("Duration minutes must be greater than 0");
-        }
-        return durationMinutes;
-    }
-
-    public void setSubserviceId(long l) {
-        this.subserviceId = l;
-    }
-
-    public void setDurationMinutes(int i) {
-        this.durationMinutes = i;
-    }
 }

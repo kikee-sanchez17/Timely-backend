@@ -1,8 +1,14 @@
 package dev.esanchez.timely.backend.module.categories;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "categories")
 public class Category {
 
@@ -16,46 +22,4 @@ public class Category {
 
     @Column(name = "display_name", nullable = false)
     private String displayName;
-
-    public Category() {
-    }
-
-    public Category(String code, String displayName) {
-        this.code = validateCode(code);
-        this.displayName = validateText(displayName, "Display name");
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void updateCode(String code) {
-        this.code = validateCode(code);
-    }
-
-    public void updateDisplayName(String displayName) {
-        this.displayName = validateText(displayName, "Display name");
-    }
-
-    private String validateCode(String code) {
-        if (code == null || code.isBlank()) {
-            throw new IllegalArgumentException("Code cannot be null or blank");
-        }
-        return code.trim().toUpperCase();
-    }
-
-    private String validateText(String value, String field) {
-        if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException(field + " cannot be null or blank");
-        }
-        return value.trim();
-    }
 }

@@ -1,5 +1,4 @@
 package dev.esanchez.timely.backend.module.business.exception;
-import dev.esanchez.timely.backend.module.business.business.exception.BusinessExceptionInterval;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

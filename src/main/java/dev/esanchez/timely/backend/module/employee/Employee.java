@@ -3,12 +3,18 @@ package dev.esanchez.timely.backend.module.employee;
 import dev.esanchez.timely.backend.module.business.Business;
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.OffsetDateTime;
 
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "employees")
 public class Employee {
 
@@ -34,52 +40,6 @@ public class Employee {
     @Column(name = "created_at", nullable = false, updatable = false)
     private OffsetDateTime createdAt;
 
-    public Employee() {}
-
-    public Employee(Business business, String name, String surname) {
-
-        this.business = ValidationUtils.requireNonNull(business, "Business cannot be null");
-        this.name = ValidationUtils.validateText(name, "Name");
-        this.surname = ValidationUtils.validateText(surname, "Name");
-        this.isActive = true;
-
-    }
-
-    public Long getEmployeeId() {
-        return employeeId;
-    }
-
-    public Business getBusiness() {
-        return business;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public Boolean isActive() {
-        return isActive;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    //Setters
-
-    public void updateName(String name) {
-        this.name = ValidationUtils.validateText(name, "Name");
-
-    }
-
-    public void updateSurname(String surname) {
-        this.surname = ValidationUtils.validateText(surname, "Surname");
-    }
-
     public void activate() {
         this.isActive = true;
     }
@@ -88,12 +48,5 @@ public class Employee {
         this.isActive = false;
     }
 
-    public void setEmployeeId(long l) {
-        this.employeeId = l;
-    }
 
-    public void setBusiness(Business business) {
-
-        this.business = business;
-    }
 }

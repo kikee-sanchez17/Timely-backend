@@ -2,14 +2,13 @@ package dev.esanchez.timely.backend.module.auth;
 
 import dev.esanchez.timely.backend.module.auth.dto.request.ResendCodeRequest;
 import dev.esanchez.timely.backend.module.auth.dto.request.VerifyUserRequest;
-import dev.esanchez.timely.backend.module.auth.dto.response.VerifyUserResponse;
 import dev.esanchez.timely.backend.module.identity.dto.request.LoginUserRequest;
 import dev.esanchez.timely.backend.module.identity.dto.request.RegisterUserRequest;
 import dev.esanchez.timely.backend.module.identity.dto.response.LoginResponse;
 import dev.esanchez.timely.backend.module.identity.User;
-import dev.esanchez.timely.backend.core.security.CustomUserDetails;
 import dev.esanchez.timely.backend.core.jwt.JwtService;
 import dev.esanchez.timely.backend.module.identity.dto.response.RegisterUserResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +25,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public RegisterUserResponse register(@RequestBody RegisterUserRequest registerUserRequest) {
+    public RegisterUserResponse register(@RequestBody @Valid RegisterUserRequest registerUserRequest) {
         User registeredUser = authenticationService.signup(registerUserRequest);
         return new RegisterUserResponse(
                 new RegisterUserResponse.UserResponse(
@@ -40,28 +39,19 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserRequest loginUserRequest){
-        //TODO:Move logic to Authentication Service
-        User authenticatedUser = authenticationService.authenticate(loginUserRequest);
-        CustomUserDetails customUserDetails = new CustomUserDetails(authenticatedUser);
-        String jwtToken = jwtService.generateToken(customUserDetails);
-        LoginResponse loginResponse = new LoginResponse(jwtToken, jwtService.getExpirationTime());
-        return ResponseEntity.ok(loginResponse);
+    public ResponseEntity<LoginResponse> authenticate(@RequestBody @Valid LoginUserRequest loginUserRequest){
+        return ResponseEntity.ok(authenticationService.authenticate(loginUserRequest));
     }
 
     @PostMapping("/verify")
-    public VerifyUserResponse verifyUser(@RequestBody VerifyUserRequest verifyUserRequest) {
+    public ResponseEntity<Void> verifyUser(@RequestBody @Valid VerifyUserRequest verifyUserRequest) {
             authenticationService.verifyUser(verifyUserRequest);
-            return new VerifyUserResponse("Account Verified successfully");
+            return ResponseEntity.ok().build();
     }
 
     @PostMapping("/resend")
-    public ResponseEntity<?> resendVerificationCode(@RequestBody ResendCodeRequest resendCodeRequest) {
-        try {
+    public ResponseEntity<Void> resendVerificationCode(@RequestBody @Valid ResendCodeRequest resendCodeRequest) {
             authenticationService.resendVerificationCode(resendCodeRequest.getEmail());
             return ResponseEntity.ok().build();
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 }

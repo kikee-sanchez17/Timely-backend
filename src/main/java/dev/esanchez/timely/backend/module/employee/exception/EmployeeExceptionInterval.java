@@ -4,6 +4,7 @@ import dev.esanchez.timely.backend.module.shared.ExceptionIntervalType;
 import dev.esanchez.timely.backend.module.employee.Employee;
 import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,6 +13,11 @@ import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "employee_exception_intervals")
 public class EmployeeExceptionInterval {
 
@@ -48,69 +54,6 @@ public class EmployeeExceptionInterval {
     @Column(name = "updated_at", nullable = false)
     private OffsetDateTime updatedAt;
 
-    public EmployeeExceptionInterval() {
-    }
-
-    public EmployeeExceptionInterval(Employee employee,
-                                     LocalDate date,
-                                     LocalTime startTime,
-                                     LocalTime endTime,
-                                     ExceptionIntervalType intervalType,
-                                     String reason) {
-
-        this.employee = ValidationUtils.requireNonNull(employee, "Employee cannot be null");
-        this.date = ValidationUtils.requireNonNull(date, "Date cannot be null");
-
-        LocalTime validatedStart = ValidationUtils.requireNonNull(startTime, "Start time cannot be null");
-        LocalTime validatedEnd = ValidationUtils.requireNonNull(endTime, "End time cannot be null");
-        ValidationUtils.validateTimeRange(validatedStart, validatedEnd);
-
-        this.startTime = validatedStart;
-        this.endTime = validatedEnd;
-        this.intervalType = ValidationUtils.requireNonNull(intervalType, "Interval type cannot be null");
-        this.reason = ValidationUtils.normalizeOptionalText(reason);
-    }
-
-    public Long getEmployeeExceptionIntervalId() {
-        return employeeExceptionIntervalId;
-    }
-
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public LocalTime getStartTime() {
-        return startTime;
-    }
-
-    public LocalTime getEndTime() {
-        return endTime;
-    }
-
-    public ExceptionIntervalType getIntervalType() {
-        return intervalType;
-    }
-
-    public String getReason() {
-        return reason;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public OffsetDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void updateDate(LocalDate date) {
-        this.date = ValidationUtils.requireNonNull(date, "Date cannot be null");
-    }
-
     public void updateTimeRange(LocalTime startTime, LocalTime endTime) {
         LocalTime validatedStart = ValidationUtils.requireNonNull(startTime, "Start time cannot be null");
         LocalTime validatedEnd = ValidationUtils.requireNonNull(endTime, "End time cannot be null");
@@ -120,14 +63,5 @@ public class EmployeeExceptionInterval {
         this.startTime = validatedStart;
         this.endTime = validatedEnd;
     }
-
-    public void updateIntervalType(ExceptionIntervalType intervalType) {
-        this.intervalType = ValidationUtils.requireNonNull(intervalType, "Interval type cannot be null");
-    }
-
-    public void updateReason(String reason) {
-        this.reason = ValidationUtils.normalizeOptionalText(reason);
-    }
-
 
 }

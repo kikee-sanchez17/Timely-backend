@@ -1,8 +1,14 @@
 package dev.esanchez.timely.backend.module.location;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "country_timezones")
 public class CountryTimezone {
 
@@ -15,22 +21,4 @@ public class CountryTimezone {
     //the primary key of the Country table because it is annotated with @Id.
     private Country country;
 
-    public CountryTimezone() {
-    }
-
-    public CountryTimezoneId getId() {
-        return id;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
-    }
-
-    public void setId(CountryTimezoneId countryTimezoneId) {
-        this.id = countryTimezoneId;
-    }
 }

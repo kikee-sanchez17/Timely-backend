@@ -2,12 +2,17 @@ package dev.esanchez.timely.backend.module.business;
 import dev.esanchez.timely.backend.module.categories.Category;
 import dev.esanchez.timely.backend.module.location.CountryTimezone;
 import dev.esanchez.timely.backend.module.identity.User;
-import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.OffsetDateTime;
 
 @Entity
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "businesses")
 public class Business {
 
@@ -47,72 +52,6 @@ public class Business {
     })
     private CountryTimezone countryTimezone;
 
-    public Business(){}
-
-    public Business(User user,
-                    String name,
-                    Category category,
-                    String city,
-                    CountryTimezone countryTimezone) {
-
-        this.user = ValidationUtils.requireNonNull(user, "User cannot be null");
-        this.name = ValidationUtils.validateText(name, "Name");
-        this.category = ValidationUtils.requireNonNull(category, "Category cannot be null");
-        this.city = ValidationUtils.validateText(city, "City");
-        this.countryTimezone = ValidationUtils.requireNonNull(countryTimezone, "CountryTimezone cannot be null");
-        this.isActive = true;
-    }
-
-
-    //Getters
-
-    public Long getBusinessId() {
-        return businessId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public Category getCategory() {
-        return category;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public String getInfo() {
-        return info;
-    }
-
-    public Boolean isActive() {
-        return isActive;
-    }
-
-    public OffsetDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public CountryTimezone getCountryTimezone() {
-        return countryTimezone;
-    }
-
-    //Setters
-
-    public void updateName(String name) {
-        this.name = ValidationUtils.validateText(name, "Name");
-
-    }
-
-    public void updateCity(String city) {
-        this.city = ValidationUtils.validateText(city, "City");
-
-    }
 
     public void updateInfo(String info) {
         this.info = info;
@@ -126,11 +65,4 @@ public class Business {
         this.isActive = false;
     }
 
-    public void setBusinessId(long l) {
-        this.businessId = l;
-    }
-
-    public void setCountryTimezone(CountryTimezone countryTimezone) {
-        this.countryTimezone = countryTimezone;
-    }
 }
