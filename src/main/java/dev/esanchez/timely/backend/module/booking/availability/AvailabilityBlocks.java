@@ -1,4 +1,4 @@
-package dev.esanchez.timely.backend.module.booking.record;
+package dev.esanchez.timely.backend.module.booking.availability;
 
 import dev.esanchez.timely.backend.module.shared.TimeBlock;
 

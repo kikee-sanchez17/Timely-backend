@@ -1,6 +1,10 @@
 package dev.esanchez.timely.backend.core.security;
 
+import dev.esanchez.timely.backend.core.globalException.customGlobalException.NotFoundException;
+import dev.esanchez.timely.backend.module.identity.User;
 import dev.esanchez.timely.backend.module.identity.UserRepository;
+import dev.esanchez.timely.backend.module.identity.UserRole;
+import dev.esanchez.timely.backend.module.identity.UserRoleRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,19 +16,26 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.List;
+
 @Configuration
 public class ApplicationConfig {
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
 
-    public ApplicationConfig(UserRepository userRepository) {
+    public ApplicationConfig(UserRepository userRepository, UserRoleRepository userRoleRepository) {
         this.userRepository = userRepository;
+        this.userRoleRepository = userRoleRepository;
     }
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
-                .map(CustomUserDetails::new)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> {
+            User user = userRepository.findByEmail(username).orElseThrow(() -> new NotFoundException("User"));
+            List<UserRole> userRoles = userRoleRepository.findAllByUser(user);
+            return new CustomUserDetails(user, userRoles);
+        };
+
     }
 
     @Bean

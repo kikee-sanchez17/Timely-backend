@@ -1,6 +1,8 @@
 package dev.esanchez.timely.backend.module.auth;
 
+import dev.esanchez.timely.backend.core.globalException.customGlobalException.CustomValidationException;
 import dev.esanchez.timely.backend.core.globalException.customGlobalException.NotFoundException;
+import dev.esanchez.timely.backend.core.handleException.customHandleException.AlreadyExistsException;
 import dev.esanchez.timely.backend.core.handleException.customHandleException.BadRequestException;
 import dev.esanchez.timely.backend.core.jwt.JwtService;
 import dev.esanchez.timely.backend.core.security.CustomUserDetails;
@@ -18,10 +20,13 @@ import dev.esanchez.timely.backend.core.email.EmailService;
 import dev.esanchez.timely.backend.module.identity.dto.response.LoginResponse;
 import jakarta.mail.MessagingException;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -55,33 +60,30 @@ public class AuthenticationService {
 
     //Creates user but it is not valid until its verified
     public User signup(RegisterUserRequest input) {
-        User user = new User(input.getName(), input.getSurname(),input.getEmail(), passwordEncoder.encode(input.getPassword()));
-        user.setVerificationCode(generateVerificationCode());
-        user.setVerificationCodeExpiresAt(OffsetDateTime.now().plusMinutes(15));
-        user.setIsActive(false);
-        sendVerificationEmail(user);
-        return userRepository.save(user);
+        if(userRepository.existsByEmail(input.getEmail())) throw new AlreadyExistsException("User ");
+        return userRepository.save(createUser(input));
     }
 
     //Checks if user is verified, if so return user object
     public LoginResponse authenticate(LoginUserRequest input) {
-        User user = userRepository.findByEmail(input.getEmail())
-                .orElseThrow(() -> new NotFoundException("User not found with email: ",input.getEmail()));
+        User user = findByEmailOrThrow(input.getEmail());
 
-        if (!user.getIsActive()) {
-            throw new BadRequestException("Account not verified. Please verify your account.");
+        if (!user.getIsVerified()) throw new BadRequestException("Account not verified. Please verify your account.");
+
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            input.getEmail(),
+                            input.getPassword()
+                    )
+            );
+        } catch (BadCredentialsException e) {
+            throw new CustomValidationException("Invalid email or password");
+        } catch (DisabledException e) {
+            throw new CustomValidationException("Account is disabled");
         }
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        input.getEmail(),
-                        input.getPassword()
-                )
-        );
 
-        CustomUserDetails customUserDetails = new CustomUserDetails(user);
-        String jwtToken = jwtService.generateToken(customUserDetails);
-
-        return new LoginResponse(jwtToken,jwtService.getExpirationTime());
+        return new LoginResponse(generateJwtToken(user),jwtService.getExpirationTime());
     }
 
     //Function to verify the user with verification code
@@ -91,15 +93,12 @@ public class AuthenticationService {
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
             //Checks if the verification code is expired
-            if (user.getVerificationCodeExpiresAt().isBefore(OffsetDateTime.now())) {
-                throw new BadRequestException("Verification code has expired");
-            }
-            if (user.getVerificationCode().equals(input.getVerificationCode())) {
+            if (user.getVerificationCodeExpiresAt().isBefore(OffsetDateTime.now())) throw new BadRequestException("Verification code has expired");
+
+            if (checkVerificationCode(input.getVerificationCode(),user.getVerificationCode())) {
                 //Set Customer Role to user
                 setRoleToUser(user,input,1L);
-                user.setVerificationCode(null);
-                user.setIsActive(true);
-                user.setVerificationCodeExpiresAt(null);
+                activateUser(user);
                 userRepository.save(user);
             } else {
                 throw new BadRequestException("Invalid verification code");
@@ -114,8 +113,8 @@ public class AuthenticationService {
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
-            if (user.getIsActive()) {
-                throw new BadRequestException("User");
+            if (user.getIsVerified()) {
+                throw new BadRequestException("User Already Verified.");
             }
             user.setVerificationCode(generateVerificationCode());
             user.setVerificationCodeExpiresAt(OffsetDateTime.now().plusHours(1));
@@ -165,5 +164,35 @@ public class AuthenticationService {
                 userRoleRepository.save(userRole);
             }
         }
+    }
+
+    private User createUser(RegisterUserRequest registerUserRequest) {
+        User user = new User(registerUserRequest.getName(), registerUserRequest.getSurname(),registerUserRequest.getEmail(), passwordEncoder.encode(registerUserRequest.getPassword()));
+        user.setVerificationCode(generateVerificationCode());
+        user.setVerificationCodeExpiresAt(OffsetDateTime.now().plusMinutes(15));
+        sendVerificationEmail(user);
+
+        return user;
+    }
+
+    private void activateUser(User user) {
+        user.setVerificationCode(null);
+        user.setIsVerified(true);
+        user.setVerificationCodeExpiresAt(null);
+    }
+
+    private boolean checkVerificationCode(String verificationCode, String verificationCodeDb) {
+        return verificationCode.equals(verificationCodeDb);
+    }
+
+    private String generateJwtToken(User user) {
+        List<UserRole> userRole = userRoleRepository.findAllByUser(user);
+        CustomUserDetails customUserDetails = new CustomUserDetails(user,userRole);
+        return  jwtService.generateToken(customUserDetails);
+    }
+
+    private User findByEmailOrThrow(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("User not found with email: ",email));
     }
 }
