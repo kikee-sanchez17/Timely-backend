@@ -4,19 +4,19 @@ import dev.esanchez.timely.backend.module.booking.dto.request.AvailableSlotReque
 import dev.esanchez.timely.backend.module.booking.dto.request.CreateBookingRequest;
 import dev.esanchez.timely.backend.module.booking.dto.response.AvailableSlotDTO;
 import dev.esanchez.timely.backend.module.booking.dto.response.BookingResponse;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/bookings")
 public class BookingController {
 
-    private final BookingServiceImpl bookingService;
+    private final BookingService bookingService;
 
-    public BookingController(BookingServiceImpl bookingService) {
-        this.bookingService = bookingService;
-    }
 
     @PostMapping
     public BookingResponse createBooking(@RequestBody CreateBookingRequest request) {
@@ -25,8 +25,8 @@ public class BookingController {
     }
 
     @PostMapping("/availability")
-    public List<AvailableSlotDTO> getAvailability(@RequestBody AvailableSlotRequest request) {
-        return bookingService.calculateAvailableSlots(request);
+    public ResponseEntity<List<AvailableSlotDTO>> getAvailability(@RequestBody AvailableSlotRequest request) {
+        return ResponseEntity.ok(bookingService.calculateAvailableSlots(request));
     }
 
 

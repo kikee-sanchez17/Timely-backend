@@ -1,7 +1,10 @@
 package dev.esanchez.timely.backend.module.booking.dto.response;
 
+import lombok.Data;
+
 import java.time.OffsetDateTime;
 
+@Data
 public class AvailableSlotDTO {
 
     private OffsetDateTime startDatetime;

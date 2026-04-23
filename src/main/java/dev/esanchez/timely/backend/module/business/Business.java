@@ -13,6 +13,7 @@ import java.time.OffsetDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "businesses")
 public class Business {
 
@@ -51,7 +52,6 @@ public class Business {
             @JoinColumn(name = "timezone_id", referencedColumnName = "timezone_id", nullable = false)
     })
     private CountryTimezone countryTimezone;
-
 
     public void updateInfo(String info) {
         this.info = info;

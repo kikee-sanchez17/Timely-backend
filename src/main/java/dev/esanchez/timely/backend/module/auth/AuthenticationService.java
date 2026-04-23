@@ -97,7 +97,7 @@ public class AuthenticationService {
 
             if (checkVerificationCode(input.getVerificationCode(),user.getVerificationCode())) {
                 //Set Customer Role to user
-                setRoleToUser(user,input,1L);
+                setRoleToUser(user,1L);
                 activateUser(user);
                 userRepository.save(user);
             } else {
@@ -155,15 +155,14 @@ public class AuthenticationService {
         return String.valueOf(code);
     }
     //This function sets Role to User (Consider moving this function to a utility package)
-    private void setRoleToUser(User user, VerifyUserRequest input,Long RoleId) {
+    private void setRoleToUser(User user,Long RoleId) {
         Role role = roleRepository.findById(RoleId).orElseThrow(() -> new NotFoundException("Role"));
         UserRoleId userRoleId = new UserRoleId(user.getUserId(), role.getRoleId());
-        if (user.getVerificationCode().equals(input.getVerificationCode())) {
             if (!userRoleRepository.existsById(userRoleId)) {
                 UserRole userRole = new UserRole(user, role);
                 userRoleRepository.save(userRole);
             }
-        }
+
     }
 
     private User createUser(RegisterUserRequest registerUserRequest) {

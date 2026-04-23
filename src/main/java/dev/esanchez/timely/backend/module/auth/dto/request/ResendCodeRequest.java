@@ -1,5 +1,8 @@
 package dev.esanchez.timely.backend.module.auth.dto.request;
 
+import lombok.Data;
+
+@Data
 public class ResendCodeRequest {
     private String email;
 

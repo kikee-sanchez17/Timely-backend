@@ -68,9 +68,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
+            System.out.println("JWT Filter passed, continuing chain"); // añade esto
 
             filterChain.doFilter(request, response);
         } catch (Exception exception) {
+            System.out.println("JWT Filter error: " + exception.getMessage());
+            exception.printStackTrace(); // añade esto
+
             handlerExceptionResolver.resolveException(request, response, null, exception);
         }
     }

@@ -10,6 +10,7 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Embeddable
 public class CountryTimezoneId implements Serializable {
 
