@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-
 public class BusinessCreator {
 
     private final UserRepository userRepository;
@@ -25,6 +24,7 @@ public class BusinessCreator {
     private final UserRoleRepository userRoleRepository;
     private final RoleRepository roleRepository;
 
+    //TODO: Need to Refactor
     public void create(CreateBusinessRequest request, String email){
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException(("User")));

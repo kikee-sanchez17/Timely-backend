@@ -1,7 +1,6 @@
 package dev.esanchez.timely.backend.module.employee;
 
 import dev.esanchez.timely.backend.module.business.Business;
-import dev.esanchez.timely.backend.module.utilsCommon.ValidationUtils;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,6 +14,7 @@ import java.time.OffsetDateTime;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Table(name = "employees")
 public class Employee {
 
@@ -34,7 +34,7 @@ public class Employee {
     private String surname;
 
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
+    private Boolean isActive;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

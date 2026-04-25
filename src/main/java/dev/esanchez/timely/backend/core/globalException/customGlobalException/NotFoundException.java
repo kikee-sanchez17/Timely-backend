@@ -12,6 +12,6 @@ public class NotFoundException extends RuntimeException {
         super( msg + field);
     }
     public NotFoundException(String entity){
-        super(entity+" Not Found.");
+        super(entity+" not found.");
     }
 }
