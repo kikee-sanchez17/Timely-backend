@@ -40,7 +40,7 @@ public class Business {
     private String city;
 
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive = true;
+    private Boolean isActive;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
