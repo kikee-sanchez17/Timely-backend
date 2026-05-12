@@ -17,13 +17,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
-    public void createEmployee(CreateEmployeeRequest createEmployeeRequest, String emailBusinessOwner) {
-        employeeCreator.create(createEmployeeRequest, emailBusinessOwner);
+    public void createEmployee(CreateEmployeeRequest createEmployeeRequest) {
+        employeeCreator.create(createEmployeeRequest);
     }
 
     @Override
-    public List<EmployeeResponse> getAllEmployees(String emailBusinessOwner) {
+    public List<EmployeeResponse> getAllEmployees() {
 
-        return employeeGetter.getAllEmployees(emailBusinessOwner);
+        return employeeGetter.getAllEmployees();
     }
 }

@@ -14,6 +14,7 @@ import java.time.OffsetDateTime;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "subservices")
 public class Subservice {
 

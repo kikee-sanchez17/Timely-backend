@@ -1,19 +1,15 @@
 package dev.esanchez.timely.backend.module.employee;
 
+import dev.esanchez.timely.backend.core.security.AuthenticationFacade;
 import dev.esanchez.timely.backend.module.business.Business;
-import dev.esanchez.timely.backend.module.business.BusinessRepository;
 import dev.esanchez.timely.backend.module.employee.creator.EmployeeCreator;
 import dev.esanchez.timely.backend.module.employee.dto.request.CreateEmployeeRequest;
-import dev.esanchez.timely.backend.module.identity.User;
-import dev.esanchez.timely.backend.module.identity.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -23,10 +19,7 @@ import static org.mockito.Mockito.*;
 class EmployeeCreatorTest {
 
     @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private BusinessRepository businessRepository;
+    private AuthenticationFacade authenticationFacade;
 
     @Mock
     private EmployeeRepository employeeRepository;
@@ -34,60 +27,42 @@ class EmployeeCreatorTest {
     @InjectMocks
     private EmployeeCreator employeeCreator;
 
-    private static final String OWNER_EMAIL = "owner@example.com";
-
     // -------------------------------------------------------------------------
     // Happy path
     // -------------------------------------------------------------------------
 
     @Test
-    void create_savesEmployeeWithCorrectData_whenUserAndBusinessExist() {
+    void create_savesEmployeeWithCorrectData_whenBusinessExists() {
+
         // given
-        User user = User.builder().email(OWNER_EMAIL).build();
-        Business business = Business.builder().user(user).build();
+        Business business = Business.builder()
+                .businessId(1L)
+                .name("Barber Shop")
+                .build();
+
+        when(authenticationFacade.getCurrentBusiness())
+                .thenReturn(business);
 
         CreateEmployeeRequest request = CreateEmployeeRequest.builder()
                 .name("John")
                 .surname("Doe")
                 .build();
 
-        when(userRepository.findByEmail(OWNER_EMAIL)).thenReturn(Optional.of(user));
-        when(businessRepository.findByUser(user)).thenReturn(Optional.of(business));
-
         // when
-        employeeCreator.create(request, OWNER_EMAIL);
+        employeeCreator.create(request);
 
         // then
-        ArgumentCaptor<Employee> captor = ArgumentCaptor.forClass(Employee.class);
+        ArgumentCaptor<Employee> captor =
+                ArgumentCaptor.forClass(Employee.class);
+
         verify(employeeRepository).save(captor.capture());
 
         Employee saved = captor.getValue();
+
         assertThat(saved.getName()).isEqualTo("John");
         assertThat(saved.getSurname()).isEqualTo("Doe");
         assertThat(saved.getBusiness()).isEqualTo(business);
-    }
-
-    // -------------------------------------------------------------------------
-    // User not found
-    // -------------------------------------------------------------------------
-
-    @Test
-    void create_throwsRuntimeException_whenUserNotFound() {
-        // given
-        CreateEmployeeRequest request = CreateEmployeeRequest.builder()
-                .name("John")
-                .surname("Doe")
-                .build();
-
-        when(userRepository.findByEmail(OWNER_EMAIL)).thenReturn(Optional.empty());
-
-        // when / then
-        assertThatThrownBy(() -> employeeCreator.create(request, OWNER_EMAIL))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("User not found");
-
-        verify(businessRepository, never()).findByUser(any());
-        verify(employeeRepository, never()).save(any());
+        assertThat(saved.getIsActive()).isTrue();
     }
 
     // -------------------------------------------------------------------------
@@ -95,20 +70,19 @@ class EmployeeCreatorTest {
     // -------------------------------------------------------------------------
 
     @Test
-    void create_throwsRuntimeException_whenBusinessNotFound() {
-        // given
-        User user = User.builder().email(OWNER_EMAIL).build();
+    void create_throwsRuntimeException_whenBusinessDoesNotExist() {
 
+        // given
         CreateEmployeeRequest request = CreateEmployeeRequest.builder()
                 .name("John")
                 .surname("Doe")
                 .build();
 
-        when(userRepository.findByEmail(OWNER_EMAIL)).thenReturn(Optional.of(user));
-        when(businessRepository.findByUser(user)).thenReturn(Optional.empty());
+        when(authenticationFacade.getCurrentBusiness())
+                .thenThrow(new RuntimeException("Business not found"));
 
         // when / then
-        assertThatThrownBy(() -> employeeCreator.create(request, OWNER_EMAIL))
+        assertThatThrownBy(() -> employeeCreator.create(request))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("Business not found");
 
@@ -120,25 +94,30 @@ class EmployeeCreatorTest {
     // -------------------------------------------------------------------------
 
     @Test
-    void create_callsRepositoriesInOrder_whenRequestIsValid() {
+    void create_callsDependenciesOnce_whenRequestIsValid() {
+
         // given
-        User user = User.builder().email(OWNER_EMAIL).build();
-        Business business = Business.builder().user(user).build();
+        Business business = Business.builder()
+                .businessId(1L)
+                .name("Barber Shop")
+                .build();
+
+        when(authenticationFacade.getCurrentBusiness())
+                .thenReturn(business);
 
         CreateEmployeeRequest request = CreateEmployeeRequest.builder()
                 .name("Jane")
                 .surname("Smith")
                 .build();
 
-        when(userRepository.findByEmail(OWNER_EMAIL)).thenReturn(Optional.of(user));
-        when(businessRepository.findByUser(user)).thenReturn(Optional.of(business));
-
         // when
-        employeeCreator.create(request, OWNER_EMAIL);
+        employeeCreator.create(request);
 
-        // then — each repository is called exactly once
-        verify(userRepository, times(1)).findByEmail(OWNER_EMAIL);
-        verify(businessRepository, times(1)).findByUser(user);
-        verify(employeeRepository, times(1)).save(any(Employee.class));
+        // then
+        verify(authenticationFacade, times(1))
+                .getCurrentBusiness();
+
+        verify(employeeRepository, times(1))
+                .save(any(Employee.class));
     }
 }

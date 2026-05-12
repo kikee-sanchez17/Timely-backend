@@ -1,6 +1,7 @@
 package dev.esanchez.timely.backend.module.employee.creator;
 
 import dev.esanchez.timely.backend.core.globalException.customGlobalException.NotFoundException;
+import dev.esanchez.timely.backend.core.security.AuthenticationFacade;
 import dev.esanchez.timely.backend.module.business.Business;
 import dev.esanchez.timely.backend.module.business.BusinessRepository;
 import dev.esanchez.timely.backend.module.employee.Employee;
@@ -15,14 +16,12 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class EmployeeCreator {
 
-    private final UserRepository userRepository;
-    private final BusinessRepository businessRepository;
     private final EmployeeRepository employeeRepository;
+    private final AuthenticationFacade authenticationFacade;
 
-    public void create(CreateEmployeeRequest createEmployeeRequest, String emailBusinessOwner){
+    public void create(CreateEmployeeRequest createEmployeeRequest){
 
-        User user = userRepository.findByEmail(emailBusinessOwner).orElseThrow(()->new NotFoundException("User"));
-        Business business = businessRepository.findByUser(user).orElseThrow(()->new NotFoundException("Business"));
+        Business business = authenticationFacade.getCurrentBusiness();
 
         Employee employee = Employee.builder()
                 .name(createEmployeeRequest.getName())

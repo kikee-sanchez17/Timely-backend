@@ -1,6 +1,7 @@
 package dev.esanchez.timely.backend.module.employee;
 
 import dev.esanchez.timely.backend.core.globalException.customGlobalException.NotFoundException;
+import dev.esanchez.timely.backend.core.security.AuthenticationFacade;
 import dev.esanchez.timely.backend.module.business.Business;
 import dev.esanchez.timely.backend.module.business.BusinessRepository;
 import dev.esanchez.timely.backend.module.employee.dto.response.EmployeeResponse;
@@ -15,14 +16,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeGetter {
 
-    private final UserRepository userRepository;
-    private final BusinessRepository businessRepository;
+    private final AuthenticationFacade authenticationFacade;
     private final EmployeeRepository employeeRepository;
 
-    public List<EmployeeResponse> getAllEmployees(String emailBusinessOwner) {
+    public List<EmployeeResponse> getAllEmployees() {
 
-        User user = userRepository.findByEmail(emailBusinessOwner).orElseThrow(()-> new NotFoundException("User"));
-        Business business = businessRepository.findByUser(user).orElseThrow(()-> new NotFoundException("Business"));
+        Business business = authenticationFacade.getCurrentBusiness();
+
         return employeeRepository.findAllByBusiness(business)
                 .orElseThrow(() -> new NotFoundException("Employees"))
                 .stream()

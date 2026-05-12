@@ -20,14 +20,12 @@ public class EmployeeController {
 
     @PostMapping("/create")
     public void createEmployee(
-            @RequestBody @Valid CreateEmployeeRequest createEmployeeRequest,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        System.out.println("Roles: "+customUserDetails.getAuthorities());
-        employeeService.createEmployee(createEmployeeRequest,customUserDetails.getUsername());
+            @RequestBody @Valid CreateEmployeeRequest createEmployeeRequest) {
+        employeeService.createEmployee(createEmployeeRequest);
     }
 
     @GetMapping("/getAllEmployees")
-    public ResponseEntity<List<EmployeeResponse>> getAllEmployees(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        return ResponseEntity.ok(employeeService.getAllEmployees(customUserDetails.getUsername()));
+    public ResponseEntity<List<EmployeeResponse>> getAllEmployees() {
+        return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 }

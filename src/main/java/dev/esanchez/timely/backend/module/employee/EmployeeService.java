@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface EmployeeService {
 
-    void createEmployee(CreateEmployeeRequest createEmployeeRequest , String emailBusinessOwner);
+    void createEmployee(CreateEmployeeRequest createEmployeeRequest);
 
-    List<EmployeeResponse> getAllEmployees(String emailBusinessOwner);
+    List<EmployeeResponse> getAllEmployees();
 }

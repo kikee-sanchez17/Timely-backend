@@ -1,11 +1,9 @@
 package dev.esanchez.timely.backend.module.employee;
 
 import dev.esanchez.timely.backend.core.globalException.customGlobalException.NotFoundException;
+import dev.esanchez.timely.backend.core.security.AuthenticationFacade;
 import dev.esanchez.timely.backend.module.business.Business;
-import dev.esanchez.timely.backend.module.business.BusinessRepository;
 import dev.esanchez.timely.backend.module.employee.dto.response.EmployeeResponse;
-import dev.esanchez.timely.backend.module.identity.User;
-import dev.esanchez.timely.backend.module.identity.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,10 +21,7 @@ import static org.mockito.Mockito.*;
 class EmployeeGetterTest {
 
     @Mock
-    private UserRepository userRepository;
-
-    @Mock
-    private BusinessRepository businessRepository;
+    private AuthenticationFacade authenticationFacade;
 
     @Mock
     private EmployeeRepository employeeRepository;
@@ -34,114 +29,95 @@ class EmployeeGetterTest {
     @InjectMocks
     private EmployeeGetter employeeGetter;
 
-    private static final String OWNER_EMAIL = "owner@example.com";
-
-    // -------------------------------------------------------------------------
-    // Happy path
-    // -------------------------------------------------------------------------
-
     @Test
-    void getAllEmployees_returnsEmployeeList_whenAllDataExists() {
-        // given
-        User user = User.builder().email(OWNER_EMAIL).build();
-        Business business = Business.builder().user(user).build();
+    void getAllEmployees_returnsEmployeeList_whenBusinessExists() {
+        Business business = Business.builder()
+                .businessId(1L)
+                .name("Barber Shop")
+                .build();
 
         List<Employee> employees = List.of(
-                Employee.builder().name("John").surname("Doe").business(business).build(),
-                Employee.builder().name("Jane").surname("Smith").business(business).build()
+                Employee.builder()
+                        .name("John")
+                        .surname("Doe")
+                        .business(business)
+                        .build(),
+                Employee.builder()
+                        .name("Jane")
+                        .surname("Smith")
+                        .business(business)
+                        .build()
         );
 
-        when(userRepository.findByEmail(OWNER_EMAIL)).thenReturn(Optional.of(user));
-        when(businessRepository.findByUser(user)).thenReturn(Optional.of(business));
-        when(employeeRepository.findAllByBusiness(business)).thenReturn(Optional.of(employees));
+        when(authenticationFacade.getCurrentBusiness())
+                .thenReturn(business);
 
-        // when
-        List<EmployeeResponse> result = employeeGetter.getAllEmployees(OWNER_EMAIL);
+        when(employeeRepository.findAllByBusiness(business))
+                .thenReturn(Optional.of(employees));
 
-        // then
+        List<EmployeeResponse> result = employeeGetter.getAllEmployees();
+
         assertThat(result).hasSize(2);
-        assertThat(result).extracting(EmployeeResponse::getName).containsExactly("John", "Jane");
-        assertThat(result).extracting(EmployeeResponse::getSurname).containsExactly("Doe", "Smith");
+        assertThat(result)
+                .extracting(EmployeeResponse::getName)
+                .containsExactly("John", "Jane");
+        assertThat(result)
+                .extracting(EmployeeResponse::getSurname)
+                .containsExactly("Doe", "Smith");
+
+        verify(authenticationFacade, times(1)).getCurrentBusiness();
+        verify(employeeRepository, times(1)).findAllByBusiness(business);
     }
-
-    // -------------------------------------------------------------------------
-    // User not found
-    // -------------------------------------------------------------------------
-
-    @Test
-    void getAllEmployees_throwsNotFoundException_whenUserNotFound() {
-        // given
-        when(userRepository.findByEmail(OWNER_EMAIL)).thenReturn(Optional.empty());
-
-        // when / then
-        assertThatThrownBy(() -> employeeGetter.getAllEmployees(OWNER_EMAIL))
-                .isInstanceOf(NotFoundException.class)
-                .hasMessage("User not found.");
-
-        verify(businessRepository, never()).findByUser(any());
-        verify(employeeRepository, never()).findAllByBusiness(any());
-    }
-
-    // -------------------------------------------------------------------------
-    // Business not found
-    // -------------------------------------------------------------------------
 
     @Test
     void getAllEmployees_throwsNotFoundException_whenBusinessNotFound() {
-        // given
-        User user = User.builder().email(OWNER_EMAIL).build();
+        when(authenticationFacade.getCurrentBusiness())
+                .thenThrow(new NotFoundException("Business"));
 
-        when(userRepository.findByEmail(OWNER_EMAIL)).thenReturn(Optional.of(user));
-        when(businessRepository.findByUser(user)).thenReturn(Optional.empty());
-
-        // when / then
-        assertThatThrownBy(() -> employeeGetter.getAllEmployees(OWNER_EMAIL))
+        assertThatThrownBy(() -> employeeGetter.getAllEmployees())
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("Business not found.");
 
         verify(employeeRepository, never()).findAllByBusiness(any());
     }
 
-    // -------------------------------------------------------------------------
-    // Employees not found
-    // -------------------------------------------------------------------------
-
     @Test
     void getAllEmployees_throwsNotFoundException_whenNoEmployeesExist() {
-        // given
-        User user = User.builder().email(OWNER_EMAIL).build();
-        Business business = Business.builder().user(user).build();
+        Business business = Business.builder()
+                .businessId(1L)
+                .name("Barber Shop")
+                .build();
 
-        when(userRepository.findByEmail(OWNER_EMAIL)).thenReturn(Optional.of(user));
-        when(businessRepository.findByUser(user)).thenReturn(Optional.of(business));
-        when(employeeRepository.findAllByBusiness(business)).thenReturn(Optional.empty());
+        when(authenticationFacade.getCurrentBusiness())
+                .thenReturn(business);
 
-        // when / then
-        assertThatThrownBy(() -> employeeGetter.getAllEmployees(OWNER_EMAIL))
+        when(employeeRepository.findAllByBusiness(business))
+                .thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> employeeGetter.getAllEmployees())
                 .isInstanceOf(NotFoundException.class)
                 .hasMessage("Employees not found.");
+
+        verify(authenticationFacade, times(1)).getCurrentBusiness();
+        verify(employeeRepository, times(1)).findAllByBusiness(business);
     }
 
-    // -------------------------------------------------------------------------
-    // Interaction verification
-    // -------------------------------------------------------------------------
-
     @Test
-    void getAllEmployees_callsRepositoriesExactlyOnce_whenRequestIsValid() {
-        // given
-        User user = User.builder().email(OWNER_EMAIL).build();
-        Business business = Business.builder().user(user).build();
+    void getAllEmployees_callsDependenciesExactlyOnce_whenRequestIsValid() {
+        Business business = Business.builder()
+                .businessId(1L)
+                .name("Barber Shop")
+                .build();
 
-        when(userRepository.findByEmail(OWNER_EMAIL)).thenReturn(Optional.of(user));
-        when(businessRepository.findByUser(user)).thenReturn(Optional.of(business));
-        when(employeeRepository.findAllByBusiness(business)).thenReturn(Optional.of(List.of()));
+        when(authenticationFacade.getCurrentBusiness())
+                .thenReturn(business);
 
-        // when
-        employeeGetter.getAllEmployees(OWNER_EMAIL);
+        when(employeeRepository.findAllByBusiness(business))
+                .thenReturn(Optional.of(List.of()));
 
-        // then
-        verify(userRepository, times(1)).findByEmail(OWNER_EMAIL);
-        verify(businessRepository, times(1)).findByUser(user);
+        employeeGetter.getAllEmployees();
+
+        verify(authenticationFacade, times(1)).getCurrentBusiness();
         verify(employeeRepository, times(1)).findAllByBusiness(business);
     }
 }
