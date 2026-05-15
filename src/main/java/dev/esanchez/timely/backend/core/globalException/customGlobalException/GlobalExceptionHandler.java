@@ -57,6 +57,11 @@ public class GlobalExceptionHandler {
          return buildError(400, ex.getMessage());
     }
 
+    @ExceptionHandler(InvalidJwtTokenException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidJwtToken(InvalidJwtTokenException ex){
+        return buildError(401,ex.getMessage());
+    }
+
     private ResponseEntity<ErrorResponse> buildError(int status, String message) {
         return ResponseEntity.status(status).body(
                 new ErrorResponse(status, message, LocalDateTime.now())
