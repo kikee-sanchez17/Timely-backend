@@ -2,6 +2,7 @@ package dev.esanchez.timely.backend.module.services;
 
 import dev.esanchez.timely.backend.module.services.dto.request.CreateSubserviceRequest;
 import dev.esanchez.timely.backend.module.services.dto.response.SubserviceResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
