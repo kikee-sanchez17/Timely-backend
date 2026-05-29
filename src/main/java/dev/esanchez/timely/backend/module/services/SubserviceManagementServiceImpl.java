@@ -1,10 +1,13 @@
 package dev.esanchez.timely.backend.module.services;
 
+import dev.esanchez.timely.backend.core.globalException.customGlobalException.NotFoundException;
 import dev.esanchez.timely.backend.module.services.dto.request.CreateSubserviceRequest;
-import dev.esanchez.timely.backend.module.services.dto.response.ServiceResponse;
 import dev.esanchez.timely.backend.module.services.dto.response.SubserviceResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,24 +29,25 @@ public class SubserviceManagementServiceImpl implements SubserviceManagementServ
         Subservice savedSubservice = subserviceRepository.save(subservice);
 
         return SubserviceResponse.builder()
-                .id(savedSubservice.getId())
+                .subserviceId(savedSubservice.getSubserviceId())
                 .name(savedSubservice.getName())
                 .description(savedSubservice.getDescription())
                 .price(savedSubservice.getPrice())
-                .durationMinutes(savedSubservice.getDurationMinutes())
+                .duration(savedSubservice.getDurationMinutes())
                 .build();
     }
 
     @Override
     public List<SubserviceResponse> getAllSubservices(long service_id) {
         // Assuming SubserviceRepository has a method to find all subservices by service ID
-        return subserviceRepository.findAllByServiceId(service_id).stream()
+        return subserviceRepository.findAllByServiceId(service_id).orElseThrow(()->new NotFoundException("Subservices"))
+                .stream()
                 .map(subservice -> SubserviceResponse.builder()
-                        .id(subservice.getId())
+                        .subserviceId(subservice.getSubserviceId())
                         .name(subservice.getName())
                         .description(subservice.getDescription())
                         .price(subservice.getPrice())
-                        .durationMinutes(subservice.getDurationMinutes())
+                        .duration(subservice.getDurationMinutes())
                         .build())
                 .toList();
     }
