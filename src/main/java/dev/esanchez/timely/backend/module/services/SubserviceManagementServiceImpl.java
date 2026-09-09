@@ -4,7 +4,6 @@ import dev.esanchez.timely.backend.core.globalException.customGlobalException.No
 import dev.esanchez.timely.backend.module.services.dto.request.CreateSubserviceRequest;
 import dev.esanchez.timely.backend.module.services.dto.response.SubserviceResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +12,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SubserviceManagementServiceImpl implements SubserviceManagementService {
 
-    @Autowired
     private SubserviceRepository subserviceRepository;
 
     @Override
@@ -40,7 +38,7 @@ public class SubserviceManagementServiceImpl implements SubserviceManagementServ
     @Override
     public List<SubserviceResponse> getAllSubservices(long service_id) {
         // Assuming SubserviceRepository has a method to find all subservices by service ID
-        return subserviceRepository.findAllByServiceId(service_id).orElseThrow(()->new NotFoundException("Subservices"))
+        return subserviceRepository.findAllByServiceId(service_id).orElseThrow(() -> new NotFoundException("Subservices"))
                 .stream()
                 .map(subservice -> SubserviceResponse.builder()
                         .subserviceId(subservice.getSubserviceId())
